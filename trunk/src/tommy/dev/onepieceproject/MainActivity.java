@@ -17,6 +17,9 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -55,7 +58,6 @@ public class MainActivity extends Activity {
  
         
         ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml("http://opvideosite.neezyl.com/data/dataen.xml");
-		
 		en.setChecked(true);
 		es.setChecked(false);
 		th.setChecked(false);
@@ -75,8 +77,13 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View arg0) {
-			
-				ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml("http://opvideosite.neezyl.com/data/dataen.xml");
+				String urlxml="";
+				if(mode==0){
+					 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
+				}else if(mode==1){
+					 urlxml="http://opvideosite.neezyl.com/data/mven.xml";	
+				}
+				ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml(urlxml);
 				 adapter=new LazyAdapter(context, listdata);
 				 list.setAdapter(adapter);
 				
@@ -95,7 +102,14 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 			
-				ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml("http://opvideosite.neezyl.com/data/datath.xml");
+				String urlxml="";
+				if(mode==0){
+					 urlxml="http://opvideosite.neezyl.com/data/datath.xml";	
+				}else if(mode==1){
+					 urlxml="http://opvideosite.neezyl.com/data/mvth.xml";	
+				}
+				
+				ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml(urlxml);
 				 adapter=new LazyAdapter(context, listdata);
 				 list.setAdapter(adapter);
 				
@@ -113,7 +127,14 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				
-				ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml("http://opvideosite.neezyl.com/data/dataes.xml");
+				String urlxml="";
+				if(mode==0){
+					 urlxml="http://opvideosite.neezyl.com/data/dataes.xml";	
+				}else if(mode==1){
+					 urlxml="http://opvideosite.neezyl.com/data/mves.xml";	
+				}
+				
+				ArrayList<HashMap<String, String>>  listdata  = PrepareListFromXml(urlxml);
 				 adapter=new LazyAdapter(context, listdata);
 				 list.setAdapter(adapter);
 				//adapter.setData(listdata);
@@ -206,5 +227,43 @@ public class MainActivity extends Activity {
 		}
 		
 		return todoItemsmap;
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	MenuInflater inflater = getMenuInflater();
+	inflater.inflate(R.menu.menu, menu);
+	return true;
+	}
+	int mode=0;
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+        final CheckBox en=(CheckBox) findViewById(R.id.en);
+        final CheckBox es=(CheckBox) findViewById(R.id.es);
+        final CheckBox th=(CheckBox) findViewById(R.id.th);
+        ArrayList<HashMap<String, String>>  listdata ;
+		switch (item.getItemId()) {
+		case R.id.onepiecemode:mode=0;
+		 listdata  = PrepareListFromXml("http://opvideosite.neezyl.com/data/dataen.xml");
+		 adapter=new LazyAdapter(context, listdata);
+		 list.setAdapter(adapter);
+		 adapter.notifyDataSetChanged();
+		 en.setChecked(true);
+		 es.setChecked(false);
+		 th.setChecked(false);
+		 break;
+		case R.id.onepiecethemovie:mode=1;
+		 listdata  = PrepareListFromXml("http://opvideosite.neezyl.com/data/mven.xml");
+		 adapter=new LazyAdapter(context, listdata);
+		 list.setAdapter(adapter);
+		 adapter.notifyDataSetChanged();
+		 en.setChecked(true);
+		 es.setChecked(false);
+		 th.setChecked(false);
+		 break;
+		
+	
+		}		
+		
+		return super.onOptionsItemSelected(item);
 	}
 }

@@ -67,7 +67,7 @@ public class FirstAC extends Activity {
 			            alertbox.show();
 					}
 				}
-			}, 3000);
+			}, 1000);
 
 		    
 		    
