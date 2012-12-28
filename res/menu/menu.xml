@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/onepiecemode" android:title="@string/onepiece"></item>
+    <item android:id="@+id/onepiecethemovie" android:title="@string/opmovie">One Piece The Movie</item>
+
+</menu>
