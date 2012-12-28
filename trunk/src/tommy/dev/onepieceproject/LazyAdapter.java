@@ -72,15 +72,16 @@ public class LazyAdapter extends BaseAdapter {
 
 				//layout.setBackgroundResource(R.drawable.app_background_d);
 				//Log.e("POS",""+position+"|"+todoItemsmap.get(position).get("data"));
-		        String filename =todoItemsmap.get(position).get("data");
-		        String filenameArray[] = filename.split("\\.");
-		        String extension = filenameArray[filenameArray.length-1];
+		       // String filename =todoItemsmap.get(position).get("data");
+		        //String filenameArray[] = filename.split("\\.");
+		        //String extension = filenameArray[filenameArray.length-1];
 		      //  Log.e("",filename);
-				if(extension.equals("mp4")){
-					Intent tostart = new Intent(Intent.ACTION_VIEW);
-					tostart.setDataAndType(Uri.parse(filename), "video/*");
-					activity.startActivity(tostart);
+				if(todoItemsmap.get(position).get("data").equals("")){
+		
 				}else{
+					Intent tostart = new Intent(Intent.ACTION_VIEW);
+					tostart.setDataAndType(Uri.parse(todoItemsmap.get(position).get("data")), "video/*");
+					activity.startActivity(tostart);
 					//vi.setBackgroundResource(R.drawable.app_background_d);
 					//Intent intent = new Intent(context, UsingMyWebview.class);
 					//intent.putExtra("url",todoItemsmap.get(aposition).get(""+position));
