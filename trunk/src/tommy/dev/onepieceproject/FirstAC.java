@@ -30,11 +30,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class FirstAC extends Activity {
@@ -73,7 +76,28 @@ public class FirstAC extends Activity {
 		    
 		
 	}
+    //////////////////////////////////////////////////////////DCTECT HOME AND BACK PREASSS
+    @Override
+    public void onBackPressed() {
+    	goOffline();
+    	super.onBackPressed();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+            case KeyEvent.KEYCODE_HOME:
+            	goOffline();
+                
+                return true;
+            }
+        }
 
+        return super.onKeyDown(keyCode, event);
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////
 	public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -212,4 +236,52 @@ public class FirstAC extends Activity {
 	                String s = getMyPhoneNumber();
 	                return s.substring(2);
 	        }
+	        
+	    	public void goOffline(){
+	    		
+	    		HttpClient httpclient = new DefaultHttpClient();
+	    	    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/userOnline/offline.php");
+	    	    try {
+	    	    	TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+	    	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
+	    	        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()));
+	    	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	    	        httppost.setHeader( "Cache-Control", "no-cache" );
+	    	        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	    	        String response = httpclient.execute(httppost, responseHandler);
+	    	    } catch (ClientProtocolException e) {
+	    	    } catch (IOException e) {
+	    	    }
+	    	}
+	    	public void goOnline(){
+	    		String response ="";
+	    		if(isOnline()){
+	    		HttpClient httpclient = new DefaultHttpClient();  
+	    	    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/userOnline/online.php");
+	    	    try {
+	    	    	TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+	    	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
+	    	        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()));
+	    	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	    	        httppost.setHeader( "Cache-Control", "no-cache" );
+	    	        ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	    	         response = httpclient.execute(httppost, responseHandler);
+	    	        TextView Onlinex=(TextView) findViewById(R.id.Online);
+	    	        Onlinex.setText(response);
+	    	    } catch (ClientProtocolException e) {
+	    	    } catch (IOException e) {
+	    	    }}else{                 
+	                AlertDialog.Builder alertbox = new AlertDialog.Builder(FirstAC.this);
+	                alertbox.setMessage("Please check your connection!");
+	                alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
+	                    public void onClick(DialogInterface arg0, int arg1) {
+	                       finish();
+	                    }
+	                });
+	                alertbox.show();
+	    		}
+	    		
+	    	
+	    	    
+	    	}
 }

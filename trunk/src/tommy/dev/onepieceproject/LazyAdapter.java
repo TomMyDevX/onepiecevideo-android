@@ -61,7 +61,7 @@ public class LazyAdapter extends BaseAdapter {
        // text.setBackgroundColor(0xFFB8E459);
         ImageView image=(ImageView)vi.findViewById(R.id.image);
         image.setImageResource(R.drawable.ficon);
-        Log.e("POS",""+position);
+        //Log.e("POS",""+position);
         text.setText(todoItemsmap.get(position).get("title"));
         vi.setOnClickListener(new OnClickListener() {
 			
