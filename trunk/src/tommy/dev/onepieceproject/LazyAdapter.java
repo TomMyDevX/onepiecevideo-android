@@ -81,7 +81,10 @@ public class LazyAdapter extends BaseAdapter {
 				}else{
 					Intent tostart = new Intent(Intent.ACTION_VIEW);
 					tostart.setDataAndType(Uri.parse(todoItemsmap.get(position).get("data")), "video/*");
-					activity.startActivity(tostart);
+					
+					
+					
+					activity.startActivity(Intent.createChooser(tostart,"Select Media"));
 					//vi.setBackgroundResource(R.drawable.app_background_d);
 					//Intent intent = new Intent(context, UsingMyWebview.class);
 					//intent.putExtra("url",todoItemsmap.get(aposition).get(""+position));
