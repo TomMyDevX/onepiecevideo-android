@@ -34,11 +34,16 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,7 +81,28 @@ public class MainActivity extends Activity {
     LazyAdapter adapter;
 
     
-    
+    public void  isAvailable() {
+		Intent tostart = new Intent(Intent.ACTION_VIEW);
+		tostart.setDataAndType(Uri.parse("1.mp4"), "video/*");
+ 	   final PackageManager mgr = context.getPackageManager();
+ 	   List<ResolveInfo> list =
+ 	      mgr.queryIntentActivities(tostart, 
+ 	         PackageManager.MATCH_DEFAULT_ONLY);
+ 	   Log.e("app video",""+list.size());
+ 	  if(list.size()<=0){
+     
+      	try {
+      		context. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mxtech.videoplayer.ad")));
+      	} catch (android.content.ActivityNotFoundException anfe) {
+      		context. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad")));
+      	}
+      finish();
+      }
+     
+ 	  
+ 	 
+ 	
+ 	}
     
     
     @Override
@@ -86,6 +112,10 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         
         setContentView(R.layout.main);
+        isAvailable();
+
+        
+        
         
         final TextView loading=(TextView) findViewById(R.id.loading);
         final CheckBox en=(CheckBox) findViewById(R.id.en);
@@ -788,6 +818,17 @@ public class MainActivity extends Activity {
 			return todoItemsmap;
 		  }
 		}
+		   public boolean isPackageExists(){
+		        List<ApplicationInfo> packages;
+		        PackageManager pm;
+		            pm = getPackageManager();        
+		            packages = pm.getInstalledApplications(0);
+		            for (ApplicationInfo packageInfo : packages) {
+		        if(packageInfo.packageName.equals("com.mxtech.videoplayer.ad")) return true;
+		        }        
+		        return false;
+		    }
+		
 }
 
 
