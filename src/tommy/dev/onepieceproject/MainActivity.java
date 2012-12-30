@@ -117,7 +117,7 @@ public class MainActivity extends Activity {
         
         
         
-        final TextView loading=(TextView) findViewById(R.id.loading);
+        final TextView loading=(TextView) findViewById(R.id.loading);  final TextView modestatus=(TextView) findViewById(R.id.modestatus);
         final CheckBox en=(CheckBox) findViewById(R.id.en);
         final CheckBox es=(CheckBox) findViewById(R.id.es);
         final CheckBox th=(CheckBox) findViewById(R.id.th);
@@ -133,13 +133,22 @@ public class MainActivity extends Activity {
         im.setImageResource(cards[n]);
         loading.setVisibility(View.GONE);
         
- 
+        
         makeloading(true);
 		String urlxml="";
 		if(getdefaultMovie()==0){
 			 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
 		}else if(getdefaultMovie()==1){
 			 urlxml="http://opvideosite.neezyl.com/data/mven.xml";	
+		}else if(getdefaultMovie()==2){
+			 urlxml="http://opvideosite.neezyl.com/data/manga/mangaen.xml";	
+		}
+		if(getdefaultMovie()==0){
+			modestatus.setText("One Piece");
+		}else if(getdefaultMovie()==1){
+			modestatus.setText("The Movie");
+		}else if(getdefaultMovie()==2){
+			modestatus.setText("Manga");
 		}
 		ArrayList<HashMap<String, String>> listdata  = testmr(urlxml);
         list=(ListView)findViewById(R.id.list);
@@ -166,6 +175,15 @@ public class MainActivity extends Activity {
 					 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
 				}else if(getdefaultMovie()==1){
 					 urlxml="http://opvideosite.neezyl.com/data/mven.xml";	
+				}else if(getdefaultMovie()==2){
+					 urlxml="http://opvideosite.neezyl.com/data/manga/mangaen.xml";	
+				}
+				if(getdefaultMovie()==0){
+					modestatus.setText("One Piece");
+				}else if(getdefaultMovie()==1){
+					modestatus.setText("The Movie");
+				}else if(getdefaultMovie()==2){
+					modestatus.setText("Manga");
 				}
 				ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
 				 adapter=new LazyAdapter(context, listdata);
@@ -191,6 +209,15 @@ public class MainActivity extends Activity {
 					 urlxml="http://opvideosite.neezyl.com/data/datager.xml";	
 				}else if(getdefaultMovie()==1){
 					 urlxml="http://opvideosite.neezyl.com/data/mvger.xml";	
+				}else if(getdefaultMovie()==2){
+					 urlxml="http://opvideosite.neezyl.com/data/manga/mangager.xml";	
+				}
+				if(getdefaultMovie()==0){
+					modestatus.setText("One Piece");
+				}else if(getdefaultMovie()==1){
+					modestatus.setText("The Movie");
+				}else if(getdefaultMovie()==2){
+					modestatus.setText("Manga");
 				}
 				ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
 				 adapter=new LazyAdapter(context, listdata);
@@ -217,6 +244,15 @@ public class MainActivity extends Activity {
 					 urlxml="http://opvideosite.neezyl.com/data/datath.xml";	
 				}else if(getdefaultMovie()==1){
 					 urlxml="http://opvideosite.neezyl.com/data/mvth.xml";	
+				}else if(getdefaultMovie()==2){
+					 urlxml="http://opvideosite.neezyl.com/data/manga/mangath.xml";	
+				}
+				if(getdefaultMovie()==0){
+					modestatus.setText("One Piece");
+				}else if(getdefaultMovie()==1){
+					modestatus.setText("The Movie");
+				}else if(getdefaultMovie()==2){
+					modestatus.setText("Manga");
 				}
 				ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
 				 adapter=new LazyAdapter(context, listdata);
@@ -241,8 +277,16 @@ public class MainActivity extends Activity {
 					 urlxml="http://opvideosite.neezyl.com/data/dataes.xml";	
 				}else if(getdefaultMovie()==1){
 					 urlxml="http://opvideosite.neezyl.com/data/mves.xml";	
+				}else if(getdefaultMovie()==2){
+					 urlxml="http://opvideosite.neezyl.com/data/manga/mangaes.xml";	
 				}
-				
+				if(getdefaultMovie()==0){
+					modestatus.setText("One Piece");
+				}else if(getdefaultMovie()==1){
+					modestatus.setText("The Movie");
+				}else if(getdefaultMovie()==2){
+					modestatus.setText("Manga");
+				}
 				ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
 			
 				 adapter=new LazyAdapter(context, listdata);
@@ -299,71 +343,6 @@ public class MainActivity extends Activity {
     };
 
 	////////////////////////////CONTECT MENU////////////////////////////////////////////////////////////////////////////////////////
-	public ArrayList<HashMap<String, String>>  PrepareListFromXml(String url) {
-		   final TextView loading=(TextView) findViewById(R.id.loading);
-		   loading.setVisibility(View.VISIBLE);
-		ArrayList<String> todoItems = new ArrayList<String>();
-		ArrayList<HashMap<String, String>> todoItemsmap = new ArrayList<HashMap<String, String>>();
-		XmlPullParser todolistXml = null;
-		try {
-			todolistXml = XmlPullParserFactory.newInstance().newPullParser();
-			try {
-				URL URL	=new URL(url);
-				URLConnection ucon = URL.openConnection();
-				ucon.setUseCaches(false);
-				ucon.setRequestProperty("Cache-Control", "no-cache");
-				todolistXml.setInput(ucon.getInputStream(),null);
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (XmlPullParserException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		//XmlResourceParser todolistXml = getResources().getXml(R.xml.data);
-
-		int eventType = -1;
-		while (eventType != XmlResourceParser.END_DOCUMENT) {
-			if (eventType == XmlResourceParser.START_TAG) {
-
-				String strNode = todolistXml.getName();
-				if (strNode.equals("url")) {
-					HashMap<String, String> map=new HashMap<String, String>();
-					map.put("title", todolistXml.getAttributeValue(null, "title"));
-					//String datasp[]=todolistXml.getAttributeValue(null, "data").split("[|]");
-					//map.put("Size",""+datasp.length);
-				//	map.put("data",datasp[0]);
-					//map.put("1", todolistXml.getAttributeValue(null, datasp[i]));
-					
-					//map.put("data", todolistXml.getAttributeValue(null, "data"));
-				//	for(int i=0;i<datasp.length;i++){
-				//		Log.e(""+i,datasp[i]);
-						map.put("data", todolistXml.getAttributeValue(null, "data"));
-						map.put("thumbnail", todolistXml.getAttributeValue(null, "thumbnail"));
-				//	}
-					todoItemsmap.add(map);
-					todoItems.add(todolistXml.getAttributeValue(null, "title"));
-				}
-			}
-
-			try {
-				eventType = todolistXml.next();
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		loading.setVisibility(View.VISIBLE);
-		return todoItemsmap;
-	}
 
 	@Override
     public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
@@ -418,7 +397,7 @@ public class MainActivity extends Activity {
 	    return editor1.commit();
 	}
 	int MODE_DIALOG_MOVIE=0;
-	int MODE_DIALOG_REPORT=1;
+	int MODE_DIALOG_REPORT=1;	int MODE_DIALOG_MANGA=2;
 	protected Dialog onCreateDialog(int id) {
 		  final Dialog dialog;
 		  switch(id) {
@@ -429,12 +408,16 @@ public class MainActivity extends Activity {
 		    dialog.setTitle("Movie Mode");	
 		    RadioButton rbdefaultmodeonepiece=(RadioButton) dialog.findViewById(R.id.modeonepiece);
 		    RadioButton rbdefaultmodemovie=(RadioButton) dialog.findViewById(R.id.modemovie);
+		    RadioButton rbdefaultmodemanga=(RadioButton) dialog.findViewById(R.id.modemanga);
 		    if(getdefaultMovie()==0){
 		    
 		    	rbdefaultmodeonepiece.setChecked(true);
 		    }else if(getdefaultMovie()==1){
 		    	
 		    	rbdefaultmodemovie.setChecked(true);
+		    }else if(getdefaultMovie()==2){
+		    	
+		    	rbdefaultmodemanga.setChecked(true);
 		    }
 		    final ImageView im_lang=(ImageView) findViewById(R.id.icon_img);
 		    rbdefaultmodeonepiece.setOnClickListener(new OnClickListener() {
@@ -454,6 +437,14 @@ public class MainActivity extends Activity {
 					 es.setChecked(false);
 					 th.setChecked(false);
 							 setdefaultMovie(0);
+							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
+								if(getdefaultMovie()==0){
+									modestatus.setText("One Piece");
+								}else if(getdefaultMovie()==1){
+									modestatus.setText("The Movie");
+								}else if(getdefaultMovie()==2){
+									modestatus.setText("Manga");
+								}
 				}
 			});
 		    rbdefaultmodemovie.setOnClickListener(new OnClickListener() {
@@ -473,9 +464,43 @@ public class MainActivity extends Activity {
 					 es.setChecked(false);
 					 th.setChecked(false);
 							 setdefaultMovie(1);
+							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
+								if(getdefaultMovie()==0){
+									modestatus.setText("One Piece");
+								}else if(getdefaultMovie()==1){
+									modestatus.setText("The Movie");
+								}else if(getdefaultMovie()==2){
+									modestatus.setText("Manga");
+								}
 				}
 			});
-		    
+		    rbdefaultmodemanga.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+			        final CheckBox en=(CheckBox) findViewById(R.id.en);
+			        final CheckBox es=(CheckBox) findViewById(R.id.es);
+			        final CheckBox th=(CheckBox) findViewById(R.id.th);
+			        makeloading(true);
+						ArrayList<HashMap<String, String>> listdata = testmr("http://opvideosite.neezyl.com/data/manga/mangaen.xml");
+					 adapter=new LazyAdapter(context, listdata);
+					 list.setAdapter(adapter);
+					 adapter.notifyDataSetChanged();
+					 im_lang.setImageResource(R.drawable.us);
+					 en.setChecked(true);
+					 es.setChecked(false);
+					 th.setChecked(false);
+							 setdefaultMovie(2);
+							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
+								if(getdefaultMovie()==0){
+									modestatus.setText("One Piece");
+								}else if(getdefaultMovie()==1){
+									modestatus.setText("The Movie");
+								}else if(getdefaultMovie()==2){
+									modestatus.setText("Manga");
+								}
+				}
+			});
 		    
 		    CheckBox btclose=(CheckBox) dialog.findViewById(R.id.closedialog);
 		    btclose.setOnClickListener(new OnClickListener() {
@@ -575,6 +600,7 @@ public class MainActivity extends Activity {
 			        httppost.setHeader( "Cache-Control", "no-cache" );
 			        ResponseHandler<String> responseHandler = new BasicResponseHandler();
 			        String response = httpclient.execute(httppost, responseHandler);
+			        Log.d("Log Off","Complete!");
 			    } catch (ClientProtocolException e) {
 			    } catch (IOException e) {
 			    }
@@ -798,6 +824,7 @@ public class MainActivity extends Activity {
 						map.put("title", todolistXml.getAttributeValue(null, "title"));
 					//	Log.e("",todolistXml.getAttributeValue(null, "title"));
 						map.put("data", todolistXml.getAttributeValue(null, "data"));
+						map.put("size", todolistXml.getAttributeValue(null, "size"));
 						map.put("thumbnail", todolistXml.getAttributeValue(null, "thumbnail"));
 						todoItemsmap.add(map);
 						todoItems.add(todolistXml.getAttributeValue(null, "title"));
