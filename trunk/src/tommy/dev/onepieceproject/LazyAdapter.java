@@ -6,6 +6,7 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
@@ -79,12 +80,18 @@ public class LazyAdapter extends BaseAdapter {
 				if(todoItemsmap.get(position).get("data").equals("")){
 		
 				}else{
-					Intent tostart = new Intent(Intent.ACTION_VIEW);
-					tostart.setDataAndType(Uri.parse(todoItemsmap.get(position).get("data")), "video/*");
+					if(getdefaultMovie()!=2){
+						Intent tostart = new Intent(Intent.ACTION_VIEW);
+						tostart.setDataAndType(Uri.parse(todoItemsmap.get(position).get("data")), "video/*");
+						activity.startActivity(Intent.createChooser(tostart,"Select Media"));
+					}else if(getdefaultMovie()==2){
+						Intent tostart = new Intent(activity,ImagesMainActivity.class);
+						tostart.putExtra("data",todoItemsmap.get(position).get("data"));
+						tostart.putExtra("size",todoItemsmap.get(position).get("size"));
+						activity.startActivity(tostart);
+						
+					}
 					
-					
-					
-					activity.startActivity(Intent.createChooser(tostart,"Select Media"));
 					//vi.setBackgroundResource(R.drawable.app_background_d);
 					//Intent intent = new Intent(context, UsingMyWebview.class);
 					//intent.putExtra("url",todoItemsmap.get(aposition).get(""+position));
@@ -107,7 +114,10 @@ public class LazyAdapter extends BaseAdapter {
 		todoItemsmap=listdata;
 		
 	}
-
+	public int getdefaultMovie(){
+	    SharedPreferences settings1 = activity.getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+	    return settings1.getInt("movie_option", 0);
+	}
 	public ArrayList<HashMap<String, String>> getTodoItemsmap() {
 		
 		return todoItemsmap;

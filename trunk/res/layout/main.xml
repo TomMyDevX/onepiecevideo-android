@@ -13,7 +13,7 @@
         android:gravity="left" >
 
         <LinearLayout
-            android:layout_width="wrap_content"  android:layout_weight="1" 
+            android:layout_width="wrap_content"  android:layout_weight="1"  android:gravity="center"
             android:layout_height="match_parent" >
 
             <ImageView
@@ -29,7 +29,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
-                android:text="One Piece Video"
+                android:text="One Piece"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp" />
 
@@ -66,6 +66,13 @@
                     android:textSize="16dp" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/modestatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="mode"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
