@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import org.apache.http.NameValuePair;
@@ -23,6 +25,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -31,7 +34,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -41,84 +46,140 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FirstAC extends Activity {
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first_ac);
-		
-			Handler myHandler = new Handler();
-			myHandler.postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					if(isOnline()){
-				    checkState();
-					finish();
-				    Intent intent = new Intent(FirstAC.this, MainActivity.class);
-				    startActivity(intent);
-					}else{                 
-			            AlertDialog.Builder alertbox = new AlertDialog.Builder(FirstAC.this);
-			            alertbox.setMessage("Please check your connection!");
-			            alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-			                public void onClick(DialogInterface arg0, int arg1) {
-			                   finish();
-			                }
-			            });
-			            alertbox.show();
-					}
-				}
-			}, 1000);
-
-		    
-		    
+		new Thread(checkOnline).start();
 		
 	}
     //////////////////////////////////////////////////////////DCTECT HOME AND BACK PREASSS
     @Override
     public void onBackPressed() {
-    	goOffline();
-    	super.onBackPressed();
+    	//finish();
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (keyCode) {
-            case KeyEvent.KEYCODE_HOME:
-            	goOffline();
-                
-                return true;
-            }
-        }
-
-        return super.onKeyDown(keyCode, event);
+        return false;
+      //  return super.onKeyDown(keyCode, event);
     }
     
     /////////////////////////////////////////////////////////////////////////////////////
-	public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+       int count=0;
+    Runnable checkOnline=   new Runnable() {
+		
+		@Override
+		public void run() {
+			isOnline.post(new Runnable() {
+				@Override
+				public void run() {
+					 TextView module_status=(TextView) findViewById(R.id.module_status);
+					 module_status.setText("Initialize");
+				}
+	    	 	});
+	        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	     
+	        isOnline.post(new Runnable() {
+				@Override
+				public void run() {
+					 TextView module_status=(TextView) findViewById(R.id.module_status);
+					 module_status.setText("Load Net Module");
+				}
+	    	 	});
+	       
                NetworkInfo netInfo = cm.getActiveNetworkInfo();
                if (netInfo != null && netInfo.isConnected()) {
                    try {
+           	        isOnline.post(new Runnable() { 
+           				@Override
+           				public void run() {  
+           				 TextView module_status=(TextView) findViewById(R.id.module_status);
+    					 module_status.setText("Connecting");
+    					 module_status.setTextColor(Color.RED);
+           					
+           				}
+           	    	 	});
                        URL url = new URL("http://www.google.com");
                        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                        urlc.setConnectTimeout(3000);
                        urlc.connect();
+  
+                       
                if (urlc.getResponseCode() == 200) {
-                       return new Boolean(true);
+            	  
+       	        	isOnline.post(new Runnable() {
+    				@Override
+    				public void run() {
+    					 TextView module_status=(TextView) findViewById(R.id.module_status);
+    					 module_status.setText("Welcome!");
+    					 module_status.setTextColor(Color.WHITE);
+    				}
+    	    	 	});
+       	      	    isOnline.post(CONNECT_COMPLETE);
+               }else{
+            	   isOnline.post(CONNECT_ERROR);
                }
                } catch (MalformedURLException e1) {
-                       // TODO Auto-generated catch block
-                       e1.printStackTrace();
+            	   isOnline.post(CONNECT_ERROR);
            } catch (IOException e) {
-                       // TODO Auto-generated catch block
-                       e.printStackTrace();
+        	   	   isOnline.post(CONNECT_ERROR);
                }
                }
-               return false;
+           
+			
+		}
+	};
+
+	
+	
+    	 Runnable   CONNECT_ERROR     =	   new Runnable() {
+			@Override
+			public void run() {
+				Message onstatus=new Message();
+				onstatus.what=404;
+				isOnline.sendMessage(onstatus);
+			}
+    	 	};
+       	 Runnable   CONNECT_COMPLETE     =	   new Runnable() {
+				@Override
+				public void run() {
+					Message onstatus=new Message();
+					onstatus.what=200;
+					isOnline.sendMessage(onstatus);
+				}
+			};
+			Handler 
+			isOnline=new Handler(){
+				@Override
+				public void handleMessage(Message msg) {
+    		
+					if(msg.what==200){
+	    			    checkState();
+						finish();
+					    Intent intent = new Intent(FirstAC.this, MainActivity.class);
+					    startActivity(intent);
+					}else if(msg.what==403){
+						AlertDialog.Builder alertbox = new AlertDialog.Builder(FirstAC.this);
+						alertbox.setMessage("Please check your connection!");
+						alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface arg0, int arg1) {
+								finish();
+							}
+		            });
+		            alertbox.show();
+    			
+    		}							
+			
+    		
+    	}
+    }; 
+    ////////////////////////////////////////////////////////////////////////////////////
+	public boolean isOnline() {
+		   
+
+			return false;
        } 
 	
 	public String returnNumber() {

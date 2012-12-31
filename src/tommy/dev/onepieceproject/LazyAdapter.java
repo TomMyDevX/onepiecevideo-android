@@ -13,14 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class LazyAdapter extends BaseAdapter {
-    
+	private static final int TYPE_COUNT = 2;
+	private static final int TYPE_ITEM_COLORED = 1;
+	private static final int TYPE_ITEM_NORMAL = 0;
     private Activity activity;
     private int data;
     private static LayoutInflater inflater=null;
@@ -45,14 +53,28 @@ public class LazyAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_COUNT;
+    }
+    @Override
+    public int getItemViewType(int position) {
+
+        int item = Integer.parseInt(getItem(position).toString());
+
+        return (item == 30) ? TYPE_ITEM_COLORED : TYPE_ITEM_NORMAL;
+    }
 
     
 
     public View getView(final int position, View convertView, final ViewGroup parent) {
+    	
         View vi=convertView;
         if(convertView==null)vi = inflater.inflate(R.layout.item, null);
         if(position<todoItemsmap.size()){
- 
+        	
+
+
       
        
   
@@ -70,7 +92,8 @@ public class LazyAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View arg0) {
-
+				setSelectedItem(position);
+                notifyDataSetChanged();
 				//layout.setBackgroundResource(R.drawable.app_background_d);
 				//Log.e("POS",""+position+"|"+todoItemsmap.get(position).get("data"));
 		       // String filename =todoItemsmap.get(position).get("data");
@@ -101,7 +124,16 @@ public class LazyAdapter extends BaseAdapter {
 				
 				}
 		});
-
+        if (position == selectedItem)
+        {
+            vi.setBackgroundResource(R.drawable.app_background_or);
+            int top = (vi == null) ? 0 : vi.getTop();
+            ((ListView) parent).setSelectionFromTop(position, top);
+        }
+        else
+        {
+            vi.setBackgroundResource(R.drawable.app_background_b);
+        }
         vi.setPadding(15, 15, 15, 15);
        // Log.e("IMG URL","http://opvideosite.neezyl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png");
         imageLoader.DisplayImage("http://opvideosite.neezyl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png", image);
@@ -122,7 +154,11 @@ public class LazyAdapter extends BaseAdapter {
 		
 		return todoItemsmap;
 	}
+		
+    private int selectedItem;
 
-
+    public void setSelectedItem(int position) {
+        selectedItem = position;
+    }
 	
 }
