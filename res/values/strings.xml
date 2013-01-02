@@ -8,5 +8,9 @@
     <string name="title_activity_first_ac">FirstAC</string>
     <string name="onepiece">One Piece</string>
     <string name="opmovie">One Piece The Movie</string>
-
+    <color  name="whitef5">#F5F5F5</color>
+    <color  name="bluef5">#8CD2F7</color>
+    <color  name="grayf5">#D5D5D5</color>
+    <color  name="gray7E">#7E7E7E</color>
+    
 </resources>

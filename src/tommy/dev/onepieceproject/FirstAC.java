@@ -96,14 +96,14 @@ public class FirstAC extends Activity {
            				@Override
            				public void run() {  
            				 TextView module_status=(TextView) findViewById(R.id.module_status);
-    					 module_status.setText("Connecting");
+    					 module_status.setText("Check your connection.");
     					 module_status.setTextColor(Color.RED);
            					
            				}
            	    	 	});
                        URL url = new URL("http://www.google.com");
                        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                       urlc.setConnectTimeout(3000);
+                       urlc.setConnectTimeout(30000);
                        urlc.connect();
   
                        
@@ -118,11 +118,14 @@ public class FirstAC extends Activity {
     				}
     	    	 	});
        	      	    isOnline.post(CONNECT_COMPLETE);
+       	      	   urlc.disconnect();
                }else{
             	   isOnline.post(CONNECT_ERROR);
+            	   urlc.disconnect();
                }
                } catch (MalformedURLException e1) {
             	   isOnline.post(CONNECT_ERROR);
+            	   
            } catch (IOException e) {
         	   	   isOnline.post(CONNECT_ERROR);
                }
@@ -165,6 +168,7 @@ public class FirstAC extends Activity {
 					}else if(msg.what==404){
 						AlertDialog.Builder alertbox = new AlertDialog.Builder(FirstAC.this);
 						alertbox.setMessage("Please check your connection!");
+						alertbox.setCancelable(false);
 						alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface arg0, int arg1) {
 								finish();
