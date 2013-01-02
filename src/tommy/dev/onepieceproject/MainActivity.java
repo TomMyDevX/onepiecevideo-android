@@ -40,6 +40,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.XmlResourceParser;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
         im.setImageResource(cards[n]);
         
         
-        new Thread((Useronline)).start();
+       // new Thread((Useronline)).start();
 	    list=(ListView)findViewById(R.id.list);
 	    
 		String urlxml="";
@@ -299,7 +300,7 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
     	
-    	new Thread(Offline).start();
+    	//new Thread(Offline).start();
     	super.onBackPressed();
     }
 
@@ -410,13 +411,7 @@ public class MainActivity extends Activity {
 					
 					 URLGOBAL="http://opvideosite.neezyl.com/data/dataen.xml";
 					 new Thread(LoderUrl).start();
-//					 adapter=new LazyAdapter(context, listdata);
-//					 list.setAdapter(adapter);
-//					 adapter.notifyDataSetChanged();
 					im_lang.setImageResource(R.drawable.us);
-					 en.setChecked(true);
-					 es.setChecked(false);
-					 th.setChecked(false);
 							 setdefaultMovie(0);
 							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
 								if(getdefaultMovie()==0){
@@ -439,13 +434,7 @@ public class MainActivity extends Activity {
 						
 						 URLGOBAL="http://opvideosite.neezyl.com/data/mven.xml";
 						 new Thread(LoderUrl).start();
-//					 adapter=new LazyAdapter(context, listdata);
-//					 list.setAdapter(adapter);
-//					 adapter.notifyDataSetChanged();
 					 im_lang.setImageResource(R.drawable.us);
-					 en.setChecked(true);
-					 es.setChecked(false);
-					 th.setChecked(false);
 							 setdefaultMovie(1);
 							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
 								if(getdefaultMovie()==0){
@@ -465,16 +454,9 @@ public class MainActivity extends Activity {
 			        final CheckBox es=(CheckBox) findViewById(R.id.es);
 			        final CheckBox th=(CheckBox) findViewById(R.id.th);
 			        makeloading(true);
-//						ArrayList<HashMap<String, String>> listdata = testmr("http://opvideosite.neezyl.com/data/manga/mangaen.xml");
-//					 adapter=new LazyAdapter(context, listdata);
-//					 list.setAdapter(adapter);
-//					 adapter.notifyDataSetChanged();
-					 URLGOBAL="http://opvideosite.neezyl.com/data/mangaen.xml";
+					 URLGOBAL="http://opvideosite.neezyl.com/data/mangaen.xml";//////////////////////////will fix manga i edit path Realpath http://opvideosite.neezyl.com/data/manga/mangaen.xml
 					 new Thread(LoderUrl).start();
 					 im_lang.setImageResource(R.drawable.us);
-					 en.setChecked(true);
-					 es.setChecked(false);
-					 th.setChecked(false);
 							 setdefaultMovie(2);
 							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
 								if(getdefaultMovie()==0){
@@ -652,8 +634,8 @@ public class MainActivity extends Activity {
     	@Override
     public void handleMessage(Message msg) {
     	if(msg.what==200){
-        	TextView Onlinex=(TextView) findViewById(R.id.Online);
-        	Onlinex.setText(""+msg.obj);
+        	//TextView Onlinex=(TextView) findViewById(R.id.Online);
+        	//Onlinex.setText(""+msg.obj);
     	}else{
             AlertDialog.Builder alertbox = new AlertDialog.Builder(context);
             alertbox.setMessage("Please check your connection!");
@@ -726,32 +708,33 @@ public class MainActivity extends Activity {
 
 		                
 		                	
-		                    loading.setVisibility(View.VISIBLE);
-		                    TranslateAnimation slide = new TranslateAnimation(0, 0, 120,0 );   
-		                    slide.setDuration(1000);   
-		                    slide.setFillAfter(true);   
+		                   
+		                    TranslateAnimation slide = new TranslateAnimation(1000, 0, 0,0 );   
+		                    slide.setDuration(300);   
+		                   //slide.setFillAfter(true);   
+		                    
 		                    loading.setText("Loading..");
 		                    loading.startAnimation(slide); 
-		                	
+		                	loading.setVisibility(View.VISIBLE);
 		                }});}else{
 		                	
-				            handler.postDelayed(new Runnable() {
+				            handler.post(new Runnable() {
 				                @Override
 				                    public void run() {
 
 				                
 				                	//loading.setVisibility(View.VISIBLE);
 			                		//loading.setVisibility(View.INVISIBLE);
-				                    TranslateAnimation slide1 = new TranslateAnimation(0, 0, 0,100 );   
+				                    TranslateAnimation slide1 = new TranslateAnimation(0, 1000, 0,0 );   
 				                    loading.setText("Complete!");
-				                    slide1.setDuration(2000);   
+				                    slide1.setDuration(300);   
 				                    slide1.setFillBefore(true);   
 				                    loading.startAnimation(slide1); 
 				                    slide1.setAnimationListener(new AnimationListener() {
 										
 										@Override
 										public void onAnimationStart(Animation animation) {
-											loading.setVisibility(View.VISIBLE);
+											//loading.setVisibility(View.VISIBLE);
 											
 										}
 										
@@ -768,7 +751,7 @@ public class MainActivity extends Activity {
 										}
 									});
 				                	
-				                }},1000);
+				                }});
 				            
 				            
 		                }
@@ -796,6 +779,18 @@ public class MainActivity extends Activity {
 		
 		@Override
 		public void run() {
+	        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()) {
+                try {
+                    URL url = new URL("http://www.google.com");
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setConnectTimeout(3000);
+                    urlc.connect();
+            if (urlc.getResponseCode() == 200) {
+    	       isOnline.post(CONNECT_COMPLETE);
+           
 			urlloader.post(new Runnable() {
 				
 				@Override
@@ -806,7 +801,7 @@ public class MainActivity extends Activity {
 					
 				}
 			});
-	
+
 			final ArrayList<HashMap<String, String>> todoItemsmap = new ArrayList<HashMap<String, String>>();
 			XmlPullParser todolistXml = null;
 			try {
@@ -818,15 +813,12 @@ public class MainActivity extends Activity {
 					ucon.setRequestProperty("Cache-Control", "no-cache");
 					todolistXml.setInput(ucon.getInputStream(),null);
 				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					isOnline.post(CONNECT_ERROR);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					isOnline.post(CONNECT_ERROR);
 				}
 			} catch (XmlPullParserException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				isOnline.post(CONNECT_ERROR);
 			}
 
 			//XmlResourceParser todolistXml = getResources().getXml(R.xml.data);
@@ -851,38 +843,85 @@ public class MainActivity extends Activity {
 				try {
 					eventType = todolistXml.next();
 				} catch (XmlPullParserException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					isOnline.post(CONNECT_ERROR);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					isOnline.post(CONNECT_ERROR);
 				}
-				urlloader.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						todoItemsmapGobal=todoItemsmap;
-						Message msg=new Message();
-						msg.what=200;
-					    urlloader.sendMessage(msg);
-						
-					}
-				});
-				urlloader.post(new Runnable() {
-					
-					@Override
-					public void run() {
-						todoItemsmapGobal=todoItemsmap;
-						Message msg=new Message();
-						msg.what=1;
-					    urlloader.sendMessage(msg);
-						
-					}
-				});
+				
 			}
+			urlloader.post(new Runnable() {
+				
+				@Override
+				public void run() {
+					todoItemsmapGobal=todoItemsmap;
+					Message msg=new Message();
+					msg.what=200;
+				    urlloader.sendMessage(msg);
+					
+				}
+			});
+			urlloader.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					todoItemsmapGobal=todoItemsmap;
+					Message msg=new Message();
+					msg.what=1;
+				    urlloader.sendMessage(msg);
+					
+				}
+			},500); }else{
+	         	   isOnline.post(CONNECT_ERROR);
+	            }
+	            } catch (MalformedURLException e1) {
+	         	   isOnline.post(CONNECT_ERROR);
+	        } catch (IOException e) {
+	     	   	   isOnline.post(CONNECT_ERROR);
+	            }
+	            }else{
+	               isOnline.post(CONNECT_ERROR);
+	            }
 
 		}
 	  };
+	  
+	  Handler	isOnline=new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+		
+				if(msg.what==200){
+
+				}else if(msg.what==404){
+					AlertDialog.Builder alertbox = new AlertDialog.Builder(context);
+					alertbox.setMessage("Please check your connection!");
+					alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							finish();
+						}
+	            });
+	            alertbox.show();
+			
+		}							
+		
+		
+	}
+}; 
+Runnable   CONNECT_ERROR     =	   new Runnable() {
+	@Override
+	public void run() {
+		Message onstatus=new Message();
+		onstatus.what=404;
+		isOnline.sendMessage(onstatus);
+	}
+	};
+	 Runnable   CONNECT_COMPLETE     =	   new Runnable() {
+		@Override
+		public void run() {
+			Message onstatus=new Message();
+			onstatus.what=200;
+			isOnline.sendMessage(onstatus);
+		}
+	};
 //	  public ArrayList<HashMap<String, String>>  testmr(String url){
 //	  
 //
@@ -1002,6 +1041,8 @@ public class MainActivity extends Activity {
 //		        return false;
 //		    }
 //		
+
+
 }
 
 

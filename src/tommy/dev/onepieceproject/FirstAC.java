@@ -126,6 +126,8 @@ public class FirstAC extends Activity {
            } catch (IOException e) {
         	   	   isOnline.post(CONNECT_ERROR);
                }
+               }else{
+            	   isOnline.post(CONNECT_ERROR);
                }
            
 			
@@ -160,7 +162,7 @@ public class FirstAC extends Activity {
 						finish();
 					    Intent intent = new Intent(FirstAC.this, MainActivity.class);
 					    startActivity(intent);
-					}else if(msg.what==403){
+					}else if(msg.what==404){
 						AlertDialog.Builder alertbox = new AlertDialog.Builder(FirstAC.this);
 						alertbox.setMessage("Please check your connection!");
 						alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
@@ -327,8 +329,8 @@ public class FirstAC extends Activity {
 	    	        httppost.setHeader( "Cache-Control", "no-cache" );
 	    	        ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	    	         response = httpclient.execute(httppost, responseHandler);
-	    	        TextView Onlinex=(TextView) findViewById(R.id.Online);
-	    	        Onlinex.setText(response);
+	    	     ////   TextView Onlinex=(TextView) findViewById(R.id.Online);
+	    	       // Onlinex.setText(response);
 	    	    } catch (ClientProtocolException e) {
 	    	    } catch (IOException e) {
 	    	    }}else{                 

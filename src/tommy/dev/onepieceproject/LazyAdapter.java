@@ -57,15 +57,7 @@ public class LazyAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return TYPE_COUNT;
     }
-    @Override
-    public int getItemViewType(int position) {
 
-        int item = Integer.parseInt(getItem(position).toString());
-
-        return (item == 30) ? TYPE_ITEM_COLORED : TYPE_ITEM_NORMAL;
-    }
-
-    
 
     public View getView(final int position, View convertView, final ViewGroup parent) {
     	
