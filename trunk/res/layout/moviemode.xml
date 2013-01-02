@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="250dp"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background_d"
+    android:background="@color/whitef5"
     android:orientation="vertical" >
 
     <TextView
@@ -10,8 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:text="Video Mode"
-        android:background="@drawable/app_background_header"
+        android:background="@drawable/maskheader"
         android:typeface="sans"
+        android:layout_marginBottom="15dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -25,6 +26,8 @@
         android:id="@+id/modeonepiece"
         android:button="@drawable/list_lang_check" 
         android:layout_width="fill_parent"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/gray7E"
         android:layout_height="wrap_content"
         android:text="One Piece" />
 
@@ -32,24 +35,20 @@
         android:id="@+id/modemovie"
         android:button="@drawable/list_lang_check" 
         android:layout_width="fill_parent"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/gray7E"
         android:layout_height="wrap_content"
         android:text="One Piece The Movie         " />
 
     <RadioButton
         android:id="@+id/modemanga"
+        android:layout_marginBottom="15dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/gray7E"
         android:button="@drawable/list_lang_check"
         android:text="One Piece Manga        " />
 
     </RadioGroup>
-
-    <CheckBox
-        android:id="@+id/closedialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:button="@drawable/check_close" />
 
 </LinearLayout>

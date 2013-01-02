@@ -116,17 +116,20 @@ public class LazyAdapter extends BaseAdapter {
 				
 				}
 		});
+        
         if (position == selectedItem)
         {
-            vi.setBackgroundResource(R.drawable.app_background_or);
+        	vi.setBackgroundResource(R.color.bluef5);
+           // vi.setBackgroundResource(R.drawable.app_background_or);
             int top = (vi == null) ? 0 : vi.getTop();
             ((ListView) parent).setSelectionFromTop(position, top);
         }
         else
         {
-            vi.setBackgroundResource(R.drawable.app_background_b);
+        	vi.setBackgroundResource(R.color.whitef5);
+          //  vi.setBackgroundResource(R.drawable.app_background_b);
         }
-        vi.setPadding(15, 15, 15, 15);
+       // vi.setPadding(15, 15, 15, 15);
        // Log.e("IMG URL","http://opvideosite.neezyl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png");
         imageLoader.DisplayImage("http://opvideosite.neezyl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png", image);
         }

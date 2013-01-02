@@ -93,27 +93,27 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+        
+        
         isAvailable();
-
+   
+        String urlxml="";
  
-        final TextView loading=(TextView) findViewById(R.id.loading);  final TextView modestatus=(TextView) findViewById(R.id.modestatus);
+        final 		TextView modestatus=(TextView) 		findViewById(R.id.modestatus);
+        final 		CheckBox en			=(CheckBox) 	findViewById(R.id.en);
+        final 		CheckBox es			=(CheckBox) 	findViewById(R.id.es);
+        final 		CheckBox th			=(CheckBox) 	findViewById(R.id.th);
+        final 		CheckBox ge			=(CheckBox) 	findViewById(R.id.ge);
+        final 		ImageView im_lang	=(ImageView) 	findViewById(R.id.icon_img);
+        ImageView 	im					=(ImageView) 	findViewById(R.id.ImageView1);
+        			list				=(ListView)		findViewById(R.id.list);
         
-        final CheckBox en=(CheckBox) findViewById(R.id.en);
-        final CheckBox es=(CheckBox) findViewById(R.id.es);
-        final CheckBox th=(CheckBox) findViewById(R.id.th);
-        final CheckBox ge=(CheckBox) findViewById(R.id.ge);
-        final ImageView im_lang=(ImageView) findViewById(R.id.icon_img);
-        ImageView im=(ImageView) findViewById(R.id.ImageView1);
-        int[] cards={R.drawable.i1,R.drawable.i2,R.drawable.i3,R.drawable.i4,R.drawable.i5,R.drawable.i6,R.drawable.i7,R.drawable.i8};
-        Random r = new Random();
-        int n=r.nextInt(8);
-        im.setImageResource(cards[n]);
+        			
+        im.setImageResource(R.drawable.i7);
         
-        
-       // new Thread((Useronline)).start();
-	    list=(ListView)findViewById(R.id.list);
 	    
-		String urlxml="";
+	    
+		
 		if(getdefaultMovie()==0){
 			 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
 		}else if(getdefaultMovie()==1){
@@ -128,17 +128,9 @@ public class MainActivity extends Activity {
 		}else if(getdefaultMovie()==2){
 			modestatus.setText("Manga");
 		}
-		//ArrayList<HashMap<String, String>> listdata  = testmr(urlxml);
-        //list=(ListView)findViewById(R.id.list);
-        //adapter=new LazyAdapter(this, listdata);
-        //list.setAdapter(adapter);
+
 		 URLGOBAL=urlxml;
 		 new Thread(LoderUrl).start();
-		//urlloader.post(LoderUrl);
-        //list.setSelected(true);
-      //  Button b=(Button)findViewById(R.id.button1);
-       // b.setOnClickListener(listener);
-
        
         
      
@@ -147,7 +139,6 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View arg0) {
-				makeloading(true);
 				String urlxml="";
 				if(getdefaultMovie()==0){
 					 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
@@ -163,10 +154,6 @@ public class MainActivity extends Activity {
 				}else if(getdefaultMovie()==2){
 					modestatus.setText("Manga");
 				}
-				//ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
-				//adapter=new LazyAdapter(context, listdata);
-				//list.setAdapter(adapter)
-				//adapter.notifyDataSetChanged();
 				 URLGOBAL=urlxml;
 				 new Thread(LoderUrl).start();
 				im_lang.setImageResource(R.drawable.us);
@@ -179,7 +166,6 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View arg0) {
-				makeloading(true);
 				String urlxml="";
 				if(getdefaultMovie()==0){
 					 urlxml="http://opvideosite.neezyl.com/data/datager.xml";	
@@ -195,12 +181,6 @@ public class MainActivity extends Activity {
 				}else if(getdefaultMovie()==2){
 					modestatus.setText("Manga");
 				}
-//				ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
-//				 adapter=new LazyAdapter(context, listdata);
-//				 list.setAdapter(adapter);
-//				
-//				adapter.notifyDataSetChanged();
-				//if (((CheckBox) en).isChecked()) {
 				 URLGOBAL=urlxml;
 				 new Thread(LoderUrl).start();
 				im_lang.setImageResource(R.drawable.ge);
@@ -215,7 +195,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View arg0) {
-				makeloading(true);
+	
 				String urlxml="";
 				if(getdefaultMovie()==0){
 					 urlxml="http://opvideosite.neezyl.com/data/datath.xml";	
@@ -231,25 +211,16 @@ public class MainActivity extends Activity {
 				}else if(getdefaultMovie()==2){
 					modestatus.setText("Manga");
 				}
-//				ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
-//				 adapter=new LazyAdapter(context, listdata);
-//				 list.setAdapter(adapter);
-//				
-//				adapter.notifyDataSetChanged();
-				//if (((CheckBox) en).isChecked()) {
 				 URLGOBAL=urlxml;
 				 new Thread(LoderUrl).start();
 				im_lang.setImageResource(R.drawable.flag_th2);
-	
-				//}
-				
+
 			}
 		});
         es.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
-				makeloading(true);
 				String urlxml="";
 				if(getdefaultMovie()==0){
 					 urlxml="http://opvideosite.neezyl.com/data/dataes.xml";	
@@ -265,13 +236,6 @@ public class MainActivity extends Activity {
 				}else if(getdefaultMovie()==2){
 					modestatus.setText("Manga");
 				}
-				//ArrayList<HashMap<String, String>> listdata = testmr(urlxml);
-			
-//				 adapter=new LazyAdapter(context, listdata);
-//				 list.setAdapter(adapter);
-//				//adapter.setData(listdata);
-//				 adapter.notifyDataSetChanged();
-				//if (((CheckBox) es).isChecked()) {
 				 URLGOBAL=urlxml;
 				 new Thread(LoderUrl).start();
 				 im_lang.setImageResource(R.drawable.flag_sp);
@@ -283,13 +247,10 @@ public class MainActivity extends Activity {
 
       final CheckBox cb_menu=(CheckBox) findViewById(R.id.bt_img_menu);
 		 registerForContextMenu(cb_menu);
-		
-    
-      cb_menu.setOnClickListener(new OnClickListener() {
-		
+         cb_menu.setOnClickListener(new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-		Log.e("","setting click");
+		//Log.e("","setting click");
 		 openContextMenu(v);
 			
 		}
@@ -299,8 +260,6 @@ public class MainActivity extends Activity {
     //////////////////////////////////////////////////////////DCTECT HOME AND BACK PREASSS
     @Override
     public void onBackPressed() {
-    	
-    	//new Thread(Offline).start();
     	super.onBackPressed();
     }
 
@@ -330,33 +289,10 @@ public class MainActivity extends Activity {
             menu.setHeaderIcon(R.drawable.system_config_boot);
             menu.setHeaderTitle("App Setting.");
             MenuInflater inflater = getMenuInflater();
-
             inflater.inflate(R.menu.menu, menu);
     }
-//	 public boolean onContextItemSelected(MenuItem item) {
-//		 switch (item.getItemId()) {
-//		 case 1: //Action for menu item “Edit”
-//		 return true;
-//		 case 2: //Action for Menu item “Delete”
-//		 return true;
-//		 default: return super.onContextItemSelected(item);
-//		 }
-//		}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//	MenuInflater inflater = getMenuInflater();
-//	inflater.inflate(R.menu.menu, menu);
-//	return true;
-//	}
-
 	@Override
 	 public boolean onContextItemSelected(MenuItem item) {
-        final CheckBox en=(CheckBox) findViewById(R.id.en);
-        final CheckBox es=(CheckBox) findViewById(R.id.es);
-        final CheckBox th=(CheckBox) findViewById(R.id.th);
-        ArrayList<HashMap<String, String>>  listdata ;
 		switch (item.getItemId()) {
 		case R.id.menumoviemode:onCreateDialog(MODE_DIALOG_MOVIE);break;
 		case R.id.report:onCreateDialog(MODE_DIALOG_REPORT);break;
@@ -378,6 +314,8 @@ public class MainActivity extends Activity {
 	}
 	int MODE_DIALOG_MOVIE=0;
 	int MODE_DIALOG_REPORT=1;	int MODE_DIALOG_MANGA=2;
+	
+	
 	protected Dialog onCreateDialog(int id) {
 		  final Dialog dialog;
 		  switch(id) {
@@ -404,10 +342,7 @@ public class MainActivity extends Activity {
 				
 				@Override
 				public void onClick(View arg0) {
-			        final CheckBox en=(CheckBox) findViewById(R.id.en);
-			        final CheckBox es=(CheckBox) findViewById(R.id.es);
-			        final CheckBox th=(CheckBox) findViewById(R.id.th);
-			        makeloading(true);
+
 					
 					 URLGOBAL="http://opvideosite.neezyl.com/data/dataen.xml";
 					 new Thread(LoderUrl).start();
@@ -421,17 +356,15 @@ public class MainActivity extends Activity {
 								}else if(getdefaultMovie()==2){
 									modestatus.setText("Manga");
 								}
+								dialog.dismiss();
+								
 				}
 			});
 		    rbdefaultmodemovie.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
-			        final CheckBox en=(CheckBox) findViewById(R.id.en);
-			        final CheckBox es=(CheckBox) findViewById(R.id.es);
-			        final CheckBox th=(CheckBox) findViewById(R.id.th);
-			        makeloading(true);
-						
+			      
 						 URLGOBAL="http://opvideosite.neezyl.com/data/mven.xml";
 						 new Thread(LoderUrl).start();
 					 im_lang.setImageResource(R.drawable.us);
@@ -444,15 +377,13 @@ public class MainActivity extends Activity {
 								}else if(getdefaultMovie()==2){
 									modestatus.setText("Manga");
 								}
+								dialog.dismiss();
 				}
 			});
 		    rbdefaultmodemanga.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
-			        final CheckBox en=(CheckBox) findViewById(R.id.en);
-			        final CheckBox es=(CheckBox) findViewById(R.id.es);
-			        final CheckBox th=(CheckBox) findViewById(R.id.th);
 			        makeloading(true);
 					 URLGOBAL="http://opvideosite.neezyl.com/data/mangaen.xml";//////////////////////////will fix manga i edit path Realpath http://opvideosite.neezyl.com/data/manga/mangaen.xml
 					 new Thread(LoderUrl).start();
@@ -466,16 +397,7 @@ public class MainActivity extends Activity {
 								}else if(getdefaultMovie()==2){
 									modestatus.setText("Manga");
 								}
-				}
-			});
-		    
-		    CheckBox btclose=(CheckBox) dialog.findViewById(R.id.closedialog);
-		    btclose.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View arg0) {
-					dialog.dismiss();
-					
+								dialog.dismiss();
 				}
 			});
 		    dialog.show();
@@ -493,6 +415,30 @@ public class MainActivity extends Activity {
 				
 				@Override
 				public void onClick(View arg0) {
+				
+						
+				
+			
+							
+					new Thread(new Runnable() {
+						Handler Handlerx=   new Handler(){
+							public void handleMessage(Message msg) {
+								if(msg.what==200){
+									dialog.dismiss();
+									Toast.makeText(context, "Thank you for report. We will fix this soon.", Toast.LENGTH_LONG).show();
+					
+								}else if(msg.what==500){
+									Toast.makeText(context, "Field rquest.", Toast.LENGTH_LONG).show();
+								}
+							
+							}
+							};
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							
+				
 					if(!title.getText().toString().matches("")&&!message.getText().toString().matches("")){
 						
 						TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -500,46 +446,56 @@ public class MainActivity extends Activity {
 					HttpClient httpclient = new DefaultHttpClient();
 				    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/report/report.php");
 
-				    //This is the data to send
+		
 				  
 
 				    try {
-				        // Add your data
+				  
 				        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
 					   
 				        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()+"|"+new Date().getTime()));
 				        nameValuePairs.add(new BasicNameValuePair("title", title.getText().toString()));
 				        nameValuePairs.add(new BasicNameValuePair("message", message.getText().toString()));
-	
-				        
 				        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				        httppost.setHeader( "Cache-Control", "no-cache" );
-				        // Execute HTTP Post Request
-
 				        ResponseHandler<String> responseHandler = new BasicResponseHandler();
 				        String response = httpclient.execute(httppost, responseHandler);
-
-
-				        //This is the response from a php application
-				        String reverseString = response;
-				        
-				       // Toast.makeText(this, "response" + reverseString, Toast.LENGTH_LONG).show();
-
-				    } catch (ClientProtocolException e) {
-				       // Toast.makeText(this, "CPE response " + e.toString(), Toast.LENGTH_LONG).show();
-				        // TODO Auto-generated catch block
+			    } catch (ClientProtocolException e) {
+				    isOnline.post(CONNECT_ERROR);
 				    } catch (IOException e) {
-				       // Toast.makeText(this, "IOE response " + e.toString(), Toast.LENGTH_LONG).show();
-				        // TODO Auto-generated catch block
+				    isOnline.post(CONNECT_ERROR);
 				    }
-					dialog.dismiss();
-					Toast.makeText(context, "Thank you for report. We will fix this soon.", Toast.LENGTH_LONG).show();
-				}else{
-					Toast.makeText(context, "Field rquest.", Toast.LENGTH_LONG).show();
-				}}
+					Handlerx.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							Message msg=new Message();
+							msg.what=200;
+						    Handlerx.sendMessage(msg);
+							
+						}
+					});
+				  
+			}else{
+				Handlerx.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						Message msg=new Message();
+						msg.what=500;
+					    Handlerx.sendMessage(msg);
+						
+					}
+				});
+				}
 				
-			});
-		    dialog.show();
+						}
+					}).start();
+
+					
+				}
+			}); dialog.show();
 		    break;
 		    
 		    
@@ -549,129 +505,6 @@ public class MainActivity extends Activity {
 		return null;
 		}
 	
-	
-	
-		
-	Runnable Offline=new Runnable() {
-			
-			@Override
-			public void run() {
-				
-								HttpClient httpclient = new DefaultHttpClient();
-			    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/userOnline/offline.php");
-			    try {
-			    	TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-			        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-			        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()));
-			        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			        httppost.setHeader( "Cache-Control", "no-cache" );
-			        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			        httpclient.execute(httppost, responseHandler);
-			        Log.d("Log Off","Complete!");
-			    } catch (ClientProtocolException e) {
-			    	 Log.d("Log Off ERROR",e.getMessage());
-			    } catch (IOException e) {
-			    	 Log.d("Log Off ERROR",e.getMessage());
-			    }
-				
-	
-				
-			}
-		};
-		
-	
-	String response ="";
-	Runnable Useronline= new Runnable() {
-		
-		@Override
-		public void run() {
-			
-			HttpClient httpclient = new DefaultHttpClient();  
-		    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/userOnline/online.php");
-		    try {
-		    	TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-		        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()));
-		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-		        httppost.setHeader( "Cache-Control", "no-cache" );
-		        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-		         response = httpclient.execute(httppost, responseHandler);
-		        
-		      
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						Message msg=new Message();
-						msg.what=200;
-						msg.obj=Integer.parseInt(response.split("<")[0]);
-						handler.sendMessage(msg);
-					}
-				});
-		    } catch (ClientProtocolException e) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						Message msg=new Message();
-						msg.what=404;
-						handler.sendMessage(msg);
-					}
-				});
-		    } catch (IOException e) {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						Message msg=new Message();
-						msg.what=404;
-						handler.sendMessage(msg);
-						
-					}
-				});
-		    }
-		
-		}
-	};
-    Handler handler = new Handler(){
-    	@Override
-    public void handleMessage(Message msg) {
-    	if(msg.what==200){
-        	//TextView Onlinex=(TextView) findViewById(R.id.Online);
-        	//Onlinex.setText(""+msg.obj);
-    	}else{
-            AlertDialog.Builder alertbox = new AlertDialog.Builder(context);
-            alertbox.setMessage("Please check your connection!");
-            alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                   finish();
-                }
-            });
-            alertbox.show();
-    	}
-
-    }};
-
-	
-//	public boolean isOnline() {
-//        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//               NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//               if (netInfo != null && netInfo.isConnected()) {
-//                   try {
-//                       URL url = new URL("http://www.google.com");
-//                       HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-//                       urlc.setConnectTimeout(3000);
-//                       urlc.connect();
-//               if (urlc.getResponseCode() == 200) {
-//                       return new Boolean(true);
-//               }
-//               } catch (MalformedURLException e1) {
-//                       // TODO Auto-generated catch block
-//                       e1.printStackTrace();
-//           } catch (IOException e) {
-//                       // TODO Auto-generated catch block
-//                       e.printStackTrace();
-//               }
-//               }
-//               return false;
-//       } 
     public void  isAvailable() {
 		Intent tostart = new Intent(Intent.ACTION_VIEW);
 		tostart.setDataAndType(Uri.parse("1.mp4"), "video/*");
@@ -699,55 +532,59 @@ public class MainActivity extends Activity {
 		    	TextView loading = (TextView) findViewById(R.id.loading);
 		        @Override
 		        public void run() {
-		          
+		         
 		        	if(show){
+		        		
 		            handler.post(new Runnable() {
 		            	
 		                @Override
 		                    public void run() {
-
-		                
+		                	
+		                    TranslateAnimation slide1 = new TranslateAnimation(0, 1000, 0,0 );   
+		                    slide1.setDuration(500);   
+		                    slide1.setFillBefore(true);
 		                	
 		                   
 		                    TranslateAnimation slide = new TranslateAnimation(1000, 0, 0,0 );   
-		                    slide.setDuration(300);   
-		                   //slide.setFillAfter(true);   
+		                    slide.setDuration(500);   
 		                    
 		                    loading.setText("Loading..");
 		                    loading.startAnimation(slide); 
 		                	loading.setVisibility(View.VISIBLE);
+		                	list.setAnimation(slide1);
+		                	list.setVisibility(View.INVISIBLE);
+		                    
 		                }});}else{
 		                	
 				            handler.post(new Runnable() {
 				                @Override
 				                    public void run() {
-
-				                
-				                	//loading.setVisibility(View.VISIBLE);
-			                		//loading.setVisibility(View.INVISIBLE);
-				                    TranslateAnimation slide1 = new TranslateAnimation(0, 1000, 0,0 );   
+				                    TranslateAnimation slide1 = new TranslateAnimation(0,2000, 0,0 );   
 				                    loading.setText("Complete!");
-				                    slide1.setDuration(300);   
+				                    slide1.setDuration(1000);   
 				                    slide1.setFillBefore(true);   
 				                    loading.startAnimation(slide1); 
+				                    
 				                    slide1.setAnimationListener(new AnimationListener() {
 										
 										@Override
 										public void onAnimationStart(Animation animation) {
-											//loading.setVisibility(View.VISIBLE);
-											
+						                    TranslateAnimation slide = new TranslateAnimation(2000, 0, 0,0 );   
+						                    slide.setDuration(1000);   
+						                	list.setAnimation(slide);
+						                	list.setVisibility(View.VISIBLE);
 										}
 										
 										@Override
 										public void onAnimationRepeat(Animation animation) {
-											// TODO Auto-generated method stub
+									
 											
 										}
 										
 										@Override
 										public void onAnimationEnd(Animation animation) {
 											loading.setVisibility(View.GONE);
-											
+
 										}
 									});
 				                	
@@ -759,19 +596,19 @@ public class MainActivity extends Activity {
 		        }).start();
 	 }
 
-
 	  ArrayList<HashMap<String, String>> todoItemsmapGobal = new ArrayList<HashMap<String, String>>();
 	  Handler urlloader=new Handler(){
 		  @Override
 		public void handleMessage(Message msg) {
 			  	if(msg.what==200){
-			  adapter=new LazyAdapter(context, todoItemsmapGobal);
-			  list.setAdapter(adapter);
-			  adapter.notifyDataSetChanged();
-		 
-			  	}else if(msg.what==0){
-			  		makeloading(true);
-			  	}else if(msg.what==1){
+						  adapter=new LazyAdapter(context, todoItemsmapGobal);
+						  list.setAdapter(adapter);
+			  			  adapter.notifyDataSetChanged();
+			  	}
+			  	if(msg.what==0){
+			  			makeloading(true);
+			  		}
+			  	if(msg.what==1){
 			  		makeloading(false);
 			  	}
 	  }};
@@ -779,18 +616,6 @@ public class MainActivity extends Activity {
 		
 		@Override
 		public void run() {
-	        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()) {
-                try {
-                    URL url = new URL("http://www.google.com");
-                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                    urlc.setConnectTimeout(3000);
-                    urlc.connect();
-            if (urlc.getResponseCode() == 200) {
-    	       isOnline.post(CONNECT_COMPLETE);
-           
 			urlloader.post(new Runnable() {
 				
 				@Override
@@ -801,7 +626,19 @@ public class MainActivity extends Activity {
 					
 				}
 			});
+	        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()) {
+                try {
+                    URL url = new URL("http://www.google.com");
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setConnectTimeout(5000);
+                    urlc.connect();
+            if (urlc.getResponseCode() == 200) {
+            	urlc.disconnect();
+    	       isOnline.post(CONNECT_COMPLETE);
+          
 			final ArrayList<HashMap<String, String>> todoItemsmap = new ArrayList<HashMap<String, String>>();
 			XmlPullParser todolistXml = null;
 			try {
@@ -812,6 +649,7 @@ public class MainActivity extends Activity {
 					ucon.setUseCaches(false);
 					ucon.setRequestProperty("Cache-Control", "no-cache");
 					todolistXml.setInput(ucon.getInputStream(),null);
+				
 				} catch (MalformedURLException e) {
 					isOnline.post(CONNECT_ERROR);
 				} catch (IOException e) {
@@ -870,7 +708,9 @@ public class MainActivity extends Activity {
 				    urlloader.sendMessage(msg);
 					
 				}
-			},500); }else{
+			},300); 
+		
+            }else{
 	         	   isOnline.post(CONNECT_ERROR);
 	            }
 	            } catch (MalformedURLException e1) {
@@ -892,13 +732,22 @@ public class MainActivity extends Activity {
 				if(msg.what==200){
 
 				}else if(msg.what==404){
+
 					AlertDialog.Builder alertbox = new AlertDialog.Builder(context);
 					alertbox.setMessage("Please check your connection!");
-					alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
+					alertbox.setCancelable(false);
+					alertbox.setNeutralButton("Retry", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
-							finish();
+							TextView loading = (TextView) findViewById(R.id.loading);
+							loading.setText("No Connection.");
+							//new Thread(checkOnline).start();
 						}
 	            });
+//					alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
+//						public void onClick(DialogInterface arg0, int arg1) {
+//							finish();
+//						}
+//	            });
 	            alertbox.show();
 			
 		}							
@@ -906,141 +755,23 @@ public class MainActivity extends Activity {
 		
 	}
 }; 
-Runnable   CONNECT_ERROR     =	   new Runnable() {
-	@Override
-	public void run() {
-		Message onstatus=new Message();
-		onstatus.what=404;
-		isOnline.sendMessage(onstatus);
-	}
-	};
-	 Runnable   CONNECT_COMPLETE     =	   new Runnable() {
-		@Override
-		public void run() {
-			Message onstatus=new Message();
-			onstatus.what=200;
-			isOnline.sendMessage(onstatus);
-		}
-	};
-//	  public ArrayList<HashMap<String, String>>  testmr(String url){
-//	  
-//
-//	  
-//	 
-//	  ArrayList<HashMap<String, String>> datas = new  ArrayList<HashMap<String, String>>() ;
-//	    ExecutorService es = Executors.newFixedThreadPool(1);
-//	    DownloadXml d = new DownloadXml(url);
-//	    es.submit(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				makeloading(true);
-//				
-//				
-//			}
-//		});
-//	    Future<ArrayList<HashMap<String, String>>> f2 = es.submit(d);
-//	    es.shutdown();
-//	    		while(true){
-//	    			if(f2.isDone()){
-//	    				try {
-//						datas=f2.get();
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					} catch (ExecutionException e) {
-//						e.printStackTrace();
-//					}
-//	    				
-//	    			  
-//	    			  makeloading(false);
-//	  		          break;
-//	    			}
-//	    			
-//	    			
-//	    			
-//	    		}
-//		return datas;
-//
-//	}
-	  /////////////////////////////// Old Class ////////////////////////////////////
-	  
-//		class DownloadXml implements Callable<ArrayList<HashMap<String, String>>> {
-//
-//			String url="";
-//			DownloadXml(String string) {
-//				url=string;
-//		  }
-//		
-		
-			
-			
-	
-//		public ArrayList<HashMap<String, String>> call() {
-//		
-//			ArrayList<String> todoItems = new ArrayList<String>();
-//			ArrayList<HashMap<String, String>> todoItemsmap = new ArrayList<HashMap<String, String>>();
-//			XmlPullParser todolistXml = null;
-//			try {
-//				todolistXml = XmlPullParserFactory.newInstance().newPullParser();
-//				try {
-//					URL URL	=new URL(url);
-//					URLConnection ucon = URL.openConnection();
-//					ucon.setUseCaches(false);
-//					ucon.setRequestProperty("Cache-Control", "no-cache");
-//					todolistXml.setInput(ucon.getInputStream(),null);
-//				} catch (MalformedURLException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			} catch (XmlPullParserException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//			int eventType = -1;
-//			while (eventType != XmlResourceParser.END_DOCUMENT) {
-//				if (eventType == XmlResourceParser.START_TAG) {
-//
-//					String strNode = todolistXml.getName();
-//					if (strNode.equals("url")) {
-//						HashMap<String, String> map=new HashMap<String, String>();
-//						map.put("title", todolistXml.getAttributeValue(null, "title"));
-//					//	Log.e("",todolistXml.getAttributeValue(null, "title"));
-//						map.put("data", todolistXml.getAttributeValue(null, "data"));
-//						map.put("size", todolistXml.getAttributeValue(null, "size"));
-//						map.put("thumbnail", todolistXml.getAttributeValue(null, "thumbnail"));
-//						todoItemsmap.add(map);
-//						todoItems.add(todolistXml.getAttributeValue(null, "title"));
-//					}
-//				}
-//
-//				try {
-//					eventType = todolistXml.next();
-//				} catch (XmlPullParserException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//
-//			return todoItemsmap;
-//		  }
-//		}
-//		   public boolean isPackageExists(){
-//		        List<ApplicationInfo> packages;
-//		        PackageManager pm;
-//		            pm = getPackageManager();        
-//		            packages = pm.getInstalledApplications(0);
-//		            for (ApplicationInfo packageInfo : packages) {
-//		        if(packageInfo.packageName.equals("com.mxtech.videoplayer.ad")) return true;
-//		        }        
-//		        return false;
-//		    }
-//		
+			     Runnable   CONNECT_ERROR     =	   new Runnable() {
+				@Override
+				public void run() {
+					Message onstatus=new Message();
+					onstatus.what=404;
+					isOnline.sendMessage(onstatus);
+				}
+				};
+				 Runnable   CONNECT_COMPLETE     =	   new Runnable() {
+					@Override
+					public void run() {
+						Message onstatus=new Message();
+						onstatus.what=200;
+						isOnline.sendMessage(onstatus);
+					}
+				};
+
 
 
 }
