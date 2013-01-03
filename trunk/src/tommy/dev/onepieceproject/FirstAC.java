@@ -103,7 +103,7 @@ public class FirstAC extends Activity {
            	    	 	});
                        URL url = new URL("http://www.google.com");
                        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                       urlc.setConnectTimeout(30000);
+                       urlc.setConnectTimeout(3000);
                        urlc.connect();
   
                        
@@ -115,9 +115,10 @@ public class FirstAC extends Activity {
     					 TextView module_status=(TextView) findViewById(R.id.module_status);
     					 module_status.setText("Welcome!");
     					 module_status.setTextColor(Color.WHITE);
+    					 isOnline.post(CONNECT_COMPLETE);
     				}
     	    	 	});
-       	      	    isOnline.post(CONNECT_COMPLETE);
+       	      	  
        	      	   urlc.disconnect();
                }else{
             	   isOnline.post(CONNECT_ERROR);
@@ -161,7 +162,7 @@ public class FirstAC extends Activity {
 				public void handleMessage(Message msg) {
     		
 					if(msg.what==200){
-	    			    checkState();
+	    			  
 						finish();
 					    Intent intent = new Intent(FirstAC.this, MainActivity.class);
 					    startActivity(intent);
@@ -182,11 +183,7 @@ public class FirstAC extends Activity {
     	}
     }; 
     ////////////////////////////////////////////////////////////////////////////////////
-	public boolean isOnline() {
-		   
 
-			return false;
-       } 
 	
 	public String returnNumber() {
 	     String number = null;
@@ -205,71 +202,7 @@ public class FirstAC extends Activity {
 	     }
 	     return number;
 	}
-	
-	public void checkState(){
-		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-		Account[] list = manager.getAccountsByType("com.google");
-		
-		Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-		Pattern PHONEPattern = Patterns.PHONE;// API level 8+
-		
-		Account[] accounts = AccountManager.get(this).getAccounts();
-		
-		String email="";
-		String phonenumber="";
-		
-		for (Account account : accounts) {
-		   if (emailPattern.matcher(account.name).matches()) {
-			   email= account.name;
-		      
-		   }
-		   if (PHONEPattern.matcher(account.name).matches()) {
-			   phonenumber= account.name;
-		       
-		   }
-		}
-		
-		
 
-		
-		HttpClient httpclient = new DefaultHttpClient();
-	    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/phonedata/verifyphone.php");
-
-	    //This is the data to send
-	  
-
-	    try {
-	        // Add your data
-	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-	        nameValuePairs.add(new BasicNameValuePair("imei", telephonyManager.getDeviceId()));
-	        nameValuePairs.add(new BasicNameValuePair("device", getDeviceName()));
-	        nameValuePairs.add(new BasicNameValuePair("osversion", android.os.Build.VERSION.RELEASE));
-	        nameValuePairs.add(new BasicNameValuePair("account", ""+email));
-	        nameValuePairs.add(new BasicNameValuePair("number", ""+phonenumber));
-	        
-	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	        httppost.setHeader( "Cache-Control", "no-cache" );
-	        // Execute HTTP Post Request
-
-	        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-	        String response = httpclient.execute(httppost, responseHandler);
-
-
-	        //This is the response from a php application
-	        String reverseString = response;
-	        
-	       // Toast.makeText(this, "response" + reverseString, Toast.LENGTH_LONG).show();
-
-	    } catch (ClientProtocolException e) {
-	       // Toast.makeText(this, "CPE response " + e.toString(), Toast.LENGTH_LONG).show();
-	        // TODO Auto-generated catch block
-	    } catch (IOException e) {
-	       // Toast.makeText(this, "IOE response " + e.toString(), Toast.LENGTH_LONG).show();
-	        // TODO Auto-generated catch block
-	    }
-		
-	}
 	public String getDeviceName() {
 		  String manufacturer = Build.MANUFACTURER;
 		  String model = Build.MODEL;
@@ -292,63 +225,9 @@ public class FirstAC extends Activity {
 		    return Character.toUpperCase(first) + s.substring(1);
 		  }
 		} 
-	    private String getMyPhoneNumber(){
-	        TelephonyManager mTelephonyMgr;
-	        mTelephonyMgr = (TelephonyManager)
-	                getSystemService(Context.TELEPHONY_SERVICE); 
-	        return mTelephonyMgr.getLine1Number();
-	        }
 
-	        private String getMy10DigitPhoneNumber(){
-	                String s = getMyPhoneNumber();
-	                return s.substring(2);
-	        }
 	        
-	    	public void goOffline(){
-	    		
-	    		HttpClient httpclient = new DefaultHttpClient();
-	    	    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/userOnline/offline.php");
-	    	    try {
-	    	    	TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-	    	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-	    	        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()));
-	    	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	    	        httppost.setHeader( "Cache-Control", "no-cache" );
-	    	        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-	    	        String response = httpclient.execute(httppost, responseHandler);
-	    	    } catch (ClientProtocolException e) {
-	    	    } catch (IOException e) {
-	    	    }
-	    	}
-	    	public void goOnline(){
-	    		String response ="";
-	    		if(isOnline()){
-	    		HttpClient httpclient = new DefaultHttpClient();  
-	    	    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/userOnline/online.php");
-	    	    try {
-	    	    	TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-	    	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-	    	        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()));
-	    	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	    	        httppost.setHeader( "Cache-Control", "no-cache" );
-	    	        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-	    	         response = httpclient.execute(httppost, responseHandler);
-	    	     ////   TextView Onlinex=(TextView) findViewById(R.id.Online);
-	    	       // Onlinex.setText(response);
-	    	    } catch (ClientProtocolException e) {
-	    	    } catch (IOException e) {
-	    	    }}else{                 
-	                AlertDialog.Builder alertbox = new AlertDialog.Builder(FirstAC.this);
-	                alertbox.setMessage("Please check your connection!");
-	                alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-	                    public void onClick(DialogInterface arg0, int arg1) {
-	                       finish();
-	                    }
-	                });
-	                alertbox.show();
-	    		}
-	    		
-	    	
+	 
 	    	    
-	    	}
+	    	
 }

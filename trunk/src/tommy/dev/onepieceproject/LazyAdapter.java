@@ -2,11 +2,15 @@ package tommy.dev.onepieceproject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
@@ -24,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LazyAdapter extends BaseAdapter {
 	private static final int TYPE_COUNT = 2;
@@ -96,9 +101,36 @@ public class LazyAdapter extends BaseAdapter {
 		
 				}else{
 					if(getdefaultMovie()!=2){
-						Intent tostart = new Intent(Intent.ACTION_VIEW);
-						tostart.setDataAndType(Uri.parse(todoItemsmap.get(position).get("data")), "video/*");
-						activity.startActivity(Intent.createChooser(tostart,"Select Media"));
+								Intent tostart = new Intent();
+								tostart.setAction(Intent.ACTION_VIEW);
+								tostart.setDataAndType(Uri.parse(todoItemsmap.get(position).get("data")), "video/*");
+								List<ResolveInfo> resInfo = activity.getPackageManager().queryIntentActivities(tostart, 0);
+								ResolveInfo best = null;    
+								for (final ResolveInfo info : resInfo){
+									
+									if (info.activityInfo.name.toLowerCase().contains("mxtech")){
+										Log.e("",info.activityInfo.name.toLowerCase());
+										 best = info;
+									}
+				                       
+								}
+					               if (best != null) 
+					                {
+					                    tostart.setClassName(best.activityInfo.packageName, best.activityInfo.name); 
+					                    activity.startActivity(tostart);
+					                }else{
+									      try {
+									      		activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mxtech.videoplayer.ad")));
+									      	} catch (android.content.ActivityNotFoundException anfe) {
+									      		activity. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad")));
+									      	}
+					                }
+								
+
+								//activity.startActivity(Intent.createChooser(tostart,"Select Media"));
+					
+								
+
 					}else if(getdefaultMovie()==2){
 						Intent tostart = new Intent(activity,ImagesMainActivity.class);
 						tostart.putExtra("data",todoItemsmap.get(position).get("data"));
@@ -130,8 +162,8 @@ public class LazyAdapter extends BaseAdapter {
           //  vi.setBackgroundResource(R.drawable.app_background_b);
         }
        // vi.setPadding(15, 15, 15, 15);
-       // Log.e("IMG URL","http://opvideosite.neezyl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png");
-        imageLoader.DisplayImage("http://opvideosite.neezyl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png", image);
+       // Log.e("IMG URL","http://opvdeo.3owl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png");
+        imageLoader.DisplayImage("http://opvdeo.3owl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png", image);
         }
         return vi;
     }
@@ -155,5 +187,33 @@ public class LazyAdapter extends BaseAdapter {
     public void setSelectedItem(int position) {
         selectedItem = position;
     }
-	
+    public void  isAvailable() {
+		Intent tostart = new Intent(Intent.ACTION_VIEW);
+		tostart.setDataAndType(Uri.parse("http://opvdeo.3owl.com/onepiece/GE/565.mp4"), "video/*");
+ 	   final PackageManager mgr = activity.getPackageManager();
+ 	   List<ResolveInfo> list =mgr.queryIntentActivities(tostart, 
+ 	         PackageManager.MATCH_DEFAULT_ONLY);
+ 	   Log.e("Size",""+list.size());
+ 	  if(list.size()<=0){
+     
+      	try {
+      		activity. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mxtech.videoplayer.ad")));
+      	} catch (android.content.ActivityNotFoundException anfe) {
+      		activity. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad")));
+      	}
+      	activity.finish();
+      }
+     
+ 	  
+ 	 
+ 	
+ 	}
+    public boolean checkMXPlayer(){
+    	try{
+    	    activity.getPackageManager().getApplicationInfo("com.mxtech.videoplayer.ad", 0 );
+    	    return true;
+    	} catch( PackageManager.NameNotFoundException e ){
+    	    return false;
+    	}
+    }
 }
