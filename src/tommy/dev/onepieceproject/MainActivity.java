@@ -83,6 +83,7 @@ public class MainActivity extends Activity {
 	private  static  	ListView 			list;
 	private				LazyAdapter 		adapter;
 	private				String 				URLGOBAL="";
+	private Button button;
     
 
     
@@ -93,9 +94,37 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+        SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+if(settings1.getInt("ads_option", 0)==0){
+	
+
+			final Dialog dialog = new Dialog(context);
+			dialog.setContentView(R.layout.dialog_show);
+			dialog.setTitle("Welcome!");
+ 
+			// set the custom dialog components - text, image and button
+			TextView text = (TextView) dialog.findViewById(R.id.text);
+			text.setText("Sorry. My server is down.I moving file to second Server. Thank a lot!");
+			
+ 
+			Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+			// if button is clicked, close the custom dialog
+			dialogButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+				    SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+				    SharedPreferences.Editor editor1 = settings1.edit();
+				    editor1.putInt("ads_option", 1);
+				    editor1.commit();
+					dialog.dismiss();
+				}
+			});
+ 
+			dialog.show();
+		  
+}
         
-        
-        isAvailable();
+       // isAvailable();
    
         String urlxml="";
  
@@ -115,11 +144,11 @@ public class MainActivity extends Activity {
 	    
 		
 		if(getdefaultMovie()==0){
-			 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
+			 urlxml="http://opvdeo.3owl.com/data/dataen.xml";	
 		}else if(getdefaultMovie()==1){
-			 urlxml="http://opvideosite.neezyl.com/data/mven.xml";	
+			 urlxml="http://opvdeo.3owl.com/data/mven.xml";	
 		}else if(getdefaultMovie()==2){
-			 urlxml="http://opvideosite.neezyl.com/data/manga/mangaen.xml";	
+			 urlxml="http://opvdeo.3owl.com/data/manga/mangaen.xml";	
 		}
 		if(getdefaultMovie()==0){
 			modestatus.setText("One Piece");
@@ -141,11 +170,11 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				String urlxml="";
 				if(getdefaultMovie()==0){
-					 urlxml="http://opvideosite.neezyl.com/data/dataen.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/dataen.xml";	
 				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvideosite.neezyl.com/data/mven.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/mven.xml";	
 				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvideosite.neezyl.com/data/manga/mangaen.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/manga/mangaen.xml";	
 				}
 				if(getdefaultMovie()==0){
 					modestatus.setText("One Piece");
@@ -168,11 +197,11 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				String urlxml="";
 				if(getdefaultMovie()==0){
-					 urlxml="http://opvideosite.neezyl.com/data/datager.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/datager.xml";	
 				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvideosite.neezyl.com/data/mvger.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/mvger.xml";	
 				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvideosite.neezyl.com/data/manga/mangager.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/manga/mangager.xml";	
 				}
 				if(getdefaultMovie()==0){
 					modestatus.setText("One Piece");
@@ -198,11 +227,11 @@ public class MainActivity extends Activity {
 	
 				String urlxml="";
 				if(getdefaultMovie()==0){
-					 urlxml="http://opvideosite.neezyl.com/data/datath.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/datath.xml";	
 				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvideosite.neezyl.com/data/mvth.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/mvth.xml";	
 				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvideosite.neezyl.com/data/manga/mangath.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/manga/mangath.xml";	
 				}
 				if(getdefaultMovie()==0){
 					modestatus.setText("One Piece");
@@ -223,11 +252,11 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 				String urlxml="";
 				if(getdefaultMovie()==0){
-					 urlxml="http://opvideosite.neezyl.com/data/dataes.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/dataes.xml";	
 				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvideosite.neezyl.com/data/mves.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/mves.xml";	
 				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvideosite.neezyl.com/data/manga/mangaes.xml";	
+					 urlxml="http://opvdeo.3owl.com/data/manga/mangaes.xml";	
 				}
 				if(getdefaultMovie()==0){
 					modestatus.setText("One Piece");
@@ -260,7 +289,7 @@ public class MainActivity extends Activity {
     //////////////////////////////////////////////////////////DCTECT HOME AND BACK PREASSS
     @Override
     public void onBackPressed() {
-    	super.onBackPressed();
+    	//super.onBackPressed();
     }
 
 
@@ -296,6 +325,7 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menumoviemode:onCreateDialog(MODE_DIALOG_MOVIE);break;
 		case R.id.report:onCreateDialog(MODE_DIALOG_REPORT);break;
+		case R.id.exit:onCreateDialog(MODE_APP_EXIT);break;
 		}		
 		
 		return super.onOptionsItemSelected(item);
@@ -313,7 +343,7 @@ public class MainActivity extends Activity {
 	    return editor1.commit();
 	}
 	int MODE_DIALOG_MOVIE=0;
-	int MODE_DIALOG_REPORT=1;	int MODE_DIALOG_MANGA=2;
+	int MODE_DIALOG_REPORT=1;	int MODE_DIALOG_MANGA=2;int MODE_APP_EXIT=3;
 	
 	
 	protected Dialog onCreateDialog(int id) {
@@ -344,7 +374,7 @@ public class MainActivity extends Activity {
 				public void onClick(View arg0) {
 
 					
-					 URLGOBAL="http://opvideosite.neezyl.com/data/dataen.xml";
+					 URLGOBAL="http://opvdeo.3owl.com/data/dataen.xml";
 					 new Thread(LoderUrl).start();
 					im_lang.setImageResource(R.drawable.us);
 							 setdefaultMovie(0);
@@ -365,7 +395,7 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(View arg0) {
 			      
-						 URLGOBAL="http://opvideosite.neezyl.com/data/mven.xml";
+						 URLGOBAL="http://opvdeo.3owl.com/data/mven.xml";
 						 new Thread(LoderUrl).start();
 					 im_lang.setImageResource(R.drawable.us);
 							 setdefaultMovie(1);
@@ -385,7 +415,7 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(View arg0) {
 			        makeloading(true);
-					 URLGOBAL="http://opvideosite.neezyl.com/data/mangaen.xml";//////////////////////////will fix manga i edit path Realpath http://opvideosite.neezyl.com/data/manga/mangaen.xml
+					 URLGOBAL="http://opvdeo.3owl.com/data/manga/mangaen.xml";//////////////////////////will fix manga i edit path Realpath http://opvdeo.3owl.com/data/manga/mangaen.xml
 					 new Thread(LoderUrl).start();
 					 im_lang.setImageResource(R.drawable.us);
 							 setdefaultMovie(2);
@@ -444,10 +474,20 @@ public class MainActivity extends Activity {
 						TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 					
 					HttpClient httpclient = new DefaultHttpClient();
-				    HttpPost httppost = new HttpPost("http://opvideosite.neezyl.com/data/report/report.php");
+				    HttpPost httppost = new HttpPost("http://opvdeo.3owl.com/data/report/report.php");
 
 		
-				  
+					Handlerx.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							Message msg=new Message();
+							msg.what=200;
+						    Handlerx.sendMessage(msg);
+							
+						}
+					});
 
 				    try {
 				  
@@ -460,22 +500,13 @@ public class MainActivity extends Activity {
 				        httppost.setHeader( "Cache-Control", "no-cache" );
 				        ResponseHandler<String> responseHandler = new BasicResponseHandler();
 				        String response = httpclient.execute(httppost, responseHandler);
+
 			    } catch (ClientProtocolException e) {
 				    isOnline.post(CONNECT_ERROR);
 				    } catch (IOException e) {
 				    isOnline.post(CONNECT_ERROR);
 				    }
-					Handlerx.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							
-							Message msg=new Message();
-							msg.what=200;
-						    Handlerx.sendMessage(msg);
-							
-						}
-					});
+
 				  
 			}else{
 				Handlerx.post(new Runnable() {
@@ -497,7 +528,7 @@ public class MainActivity extends Activity {
 				}
 			}); dialog.show();
 		    break;
-		    
+		   case 3:finish();break;
 		    
 		default:
 		    dialog = null;
@@ -505,27 +536,7 @@ public class MainActivity extends Activity {
 		return null;
 		}
 	
-    public void  isAvailable() {
-		Intent tostart = new Intent(Intent.ACTION_VIEW);
-		tostart.setDataAndType(Uri.parse("1.mp4"), "video/*");
- 	   final PackageManager mgr = context.getPackageManager();
- 	   List<ResolveInfo> list =
- 	      mgr.queryIntentActivities(tostart, 
- 	         PackageManager.MATCH_DEFAULT_ONLY);
- 	  if(list.size()<=0){
-     
-      	try {
-      		context. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.mxtech.videoplayer.ad")));
-      	} catch (android.content.ActivityNotFoundException anfe) {
-      		context. startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.mxtech.videoplayer.ad")));
-      	}
-      finish();
-      }
-     
- 	  
- 	 
- 	
- 	}
+
 	 public void makeloading(final boolean show){
 		  final Handler handler = new Handler();
 		    new Thread(new Runnable() {
@@ -540,12 +551,12 @@ public class MainActivity extends Activity {
 		                @Override
 		                    public void run() {
 		                	
-		                    TranslateAnimation slide1 = new TranslateAnimation(0, 1000, 0,0 );   
+		                    TranslateAnimation slide1 = new TranslateAnimation(0, 2000, 0,0 );   
 		                    slide1.setDuration(500);   
 		                    slide1.setFillBefore(true);
 		                	
 		                   
-		                    TranslateAnimation slide = new TranslateAnimation(1000, 0, 0,0 );   
+		                    TranslateAnimation slide = new TranslateAnimation(2000, 0, 0,0 );   
 		                    slide.setDuration(500);   
 		                    
 		                    loading.setText("Loading..");
@@ -743,11 +754,6 @@ public class MainActivity extends Activity {
 							//new Thread(checkOnline).start();
 						}
 	            });
-//					alertbox.setNeutralButton("Exit", new DialogInterface.OnClickListener() {
-//						public void onClick(DialogInterface arg0, int arg1) {
-//							finish();
-//						}
-//	            });
 	            alertbox.show();
 			
 		}							
