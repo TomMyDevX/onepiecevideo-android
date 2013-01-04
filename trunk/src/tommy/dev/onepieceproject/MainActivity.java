@@ -1,6 +1,7 @@
 package tommy.dev.onepieceproject;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,9 +37,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -51,6 +54,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.Loader;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -60,12 +66,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Checkable;
@@ -77,25 +90,55 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity  implements TextWatcher{
 
 	final 				MainActivity 		context=this;
 	private  static  	ListView 			list;
 	private				LazyAdapter 		adapter;
 	private				String 				URLGOBAL="";
 	private Button button;
-    
+	 Thread myThread=new Thread();
+	 CheckBox updown_silde;
+     CheckBox en;
+    CheckBox es;
+    CheckBox th;
+    CheckBox ge;
+    CheckBox fr;
+    AutoCompleteTextView autoep;
+     ImageView up;
+	 ImageView down;
+	 ImageView onplay;
+	 ImageView 	im;
+	 ImageView im_lang;
+	  LinearLayout slidela;
+	  TextView modestatus;
+	  TextView loading;
+	  AutoCompleteTextView myAutoComplete	;
+	  @Override
+	  protected void onResume()
+	  {
+	      super.onResume();
 
-    
-    
+	      
+	      myAutoComplete.clearFocus();
+	      slidela.requestFocus();
+	  }
     @Override
     public void onCreate(Bundle savedInstanceState) {
-       
+    	if(isTabletDevice()){
+    		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);   
+    	}else{
+    		setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);   
+    	}
+    	
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.main);
+
+       
+        
         SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
-if(settings1.getInt("ads_option", 0)==0){
+        if(settings1.getInt("ads_option", 0)==0){
 	
 
 			final Dialog dialog = new Dialog(context);
@@ -126,67 +169,61 @@ if(settings1.getInt("ads_option", 0)==0){
         
        // isAvailable();
    
-        String urlxml="";
- 
-        final 		TextView modestatus=(TextView) 		findViewById(R.id.modestatus);
-        final 		CheckBox en			=(CheckBox) 	findViewById(R.id.en);
-        final 		CheckBox es			=(CheckBox) 	findViewById(R.id.es);
-        final 		CheckBox th			=(CheckBox) 	findViewById(R.id.th);
-        final 		CheckBox ge			=(CheckBox) 	findViewById(R.id.ge);
-        final 		ImageView im_lang	=(ImageView) 	findViewById(R.id.icon_img);
-        ImageView 	im					=(ImageView) 	findViewById(R.id.ImageView1);
-        			list				=(ListView)		findViewById(R.id.list);
-        
-        			
-        im.setImageResource(R.drawable.i7);
-        
-	    
-	    
-		
-		if(getdefaultMovie()==0){
-			 urlxml="http://opvdeo.3owl.com/data/dataen.xml";	
-		}else if(getdefaultMovie()==1){
-			 urlxml="http://opvdeo.3owl.com/data/mven.xml";	
-		}else if(getdefaultMovie()==2){
-			 urlxml="http://opvdeo.3owl.com/data/manga/mangaen.xml";	
-		}
-		if(getdefaultMovie()==0){
-			modestatus.setText("One Piece");
-		}else if(getdefaultMovie()==1){
-			modestatus.setText("The Movie");
-		}else if(getdefaultMovie()==2){
-			modestatus.setText("Manga");
-		}
-
-		 URLGOBAL=urlxml;
-		 new Thread(LoderUrl).start();
-       
-        
      
+ 
+       
+        en			=(CheckBox) 	findViewById(R.id.en);
+        es			=(CheckBox) 	findViewById(R.id.es);
+        th			=(CheckBox) 	findViewById(R.id.th);
+        ge			=(CheckBox) 	findViewById(R.id.ge);
+        fr			=(CheckBox) 	findViewById(R.id.fr);
+        autoep			=(AutoCompleteTextView) 	findViewById(R.id.go_src);
+        autoep.clearFocus();
+        up=(ImageView) findViewById(R.id.up_bt);
+		down=(ImageView) findViewById(R.id.down_bt);
+		onplay=(ImageView) findViewById(R.id.onplay);
+		updown_silde=(CheckBox) findViewById(R.id.updown_silde);
+        im					=(ImageView) 	findViewById(R.id.ImageView1);
+        list				=(ListView)		findViewById(R.id.list);
+        im_lang	=(ImageView)findViewById(R.id.icon_img);
+	    slidela=(LinearLayout) findViewById(R.id.dfdsf);
+	    modestatus=(TextView) 		findViewById(R.id.modestatus);
+	    loading = (TextView) findViewById(R.id.loading);
+	    myAutoComplete			=(AutoCompleteTextView) 	findViewById(R.id.go_src);
+	    
+        im.setImageResource(R.drawable.i7);
+	      myAutoComplete.clearFocus();
+	      slidela.requestFocus();
+	      
+        final InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);inputMethodManager.showSoftInput(autoep, InputMethodManager.SHOW_IMPLICIT);
+        make_slide();
+
+		 URLGOBAL=getDefaultUrlLang();
+		 if(myThread.isAlive()){
+			    myThread.interrupt(); 
+			}
+			myThread = new Thread(LoderUrl);
+			myThread.start();
+		// new Thread(LoderUrl).start();
+
+
+		 
+		 
         en.setOnClickListener(new OnClickListener() {
         	 
 			
 			@Override
 			public void onClick(View arg0) {
-				String urlxml="";
-				if(getdefaultMovie()==0){
-					 urlxml="http://opvdeo.3owl.com/data/dataen.xml";	
-				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvdeo.3owl.com/data/mven.xml";	
-				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvdeo.3owl.com/data/manga/mangaen.xml";	
-				}
-				if(getdefaultMovie()==0){
-					modestatus.setText("One Piece");
-				}else if(getdefaultMovie()==1){
-					modestatus.setText("The Movie");
-				}else if(getdefaultMovie()==2){
-					modestatus.setText("Manga");
-				}
-				 URLGOBAL=urlxml;
-				 new Thread(LoderUrl).start();
-				im_lang.setImageResource(R.drawable.us);
 
+				 setdefaultUserLang(0);
+				 URLGOBAL=getDefaultUrlLang();
+				 if(myThread.isAlive()){
+					    myThread.interrupt(); 
+					}
+					myThread = new Thread(LoderUrl);
+					myThread.start();
+					
+	
 				
 			}
 		});
@@ -195,25 +232,16 @@ if(settings1.getInt("ads_option", 0)==0){
 			
 			@Override
 			public void onClick(View arg0) {
-				String urlxml="";
-				if(getdefaultMovie()==0){
-					 urlxml="http://opvdeo.3owl.com/data/datager.xml";	
-				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvdeo.3owl.com/data/mvger.xml";	
-				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvdeo.3owl.com/data/manga/mangager.xml";	
-				}
-				if(getdefaultMovie()==0){
-					modestatus.setText("One Piece");
-				}else if(getdefaultMovie()==1){
-					modestatus.setText("The Movie");
-				}else if(getdefaultMovie()==2){
-					modestatus.setText("Manga");
-				}
-				 URLGOBAL=urlxml;
-				 new Thread(LoderUrl).start();
-				im_lang.setImageResource(R.drawable.ge);
-					
+				setdefaultUserLang(1);
+				 URLGOBAL=getDefaultUrlLang();
+				 
+				 if(myThread.isAlive()){
+					    myThread.interrupt(); 
+					}
+					myThread = new Thread(LoderUrl);
+					myThread.start();
+				
+	
 				//}
 				
 			}
@@ -225,55 +253,54 @@ if(settings1.getInt("ads_option", 0)==0){
 			@Override
 			public void onClick(View arg0) {
 	
-				String urlxml="";
-				if(getdefaultMovie()==0){
-					 urlxml="http://opvdeo.3owl.com/data/datath.xml";	
-				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvdeo.3owl.com/data/mvth.xml";	
-				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvdeo.3owl.com/data/manga/mangath.xml";	
-				}
-				if(getdefaultMovie()==0){
-					modestatus.setText("One Piece");
-				}else if(getdefaultMovie()==1){
-					modestatus.setText("The Movie");
-				}else if(getdefaultMovie()==2){
-					modestatus.setText("Manga");
-				}
-				 URLGOBAL=urlxml;
-				 new Thread(LoderUrl).start();
-				im_lang.setImageResource(R.drawable.flag_th2);
+				setdefaultUserLang(2);
+				 URLGOBAL=getDefaultUrlLang();
+				 
+				 if(myThread.isAlive()){
+					    myThread.interrupt(); 
+					}
+					myThread = new Thread(LoderUrl);
+					myThread.start();
 
+			
 			}
 		});
         es.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View arg0) {
-				String urlxml="";
-				if(getdefaultMovie()==0){
-					 urlxml="http://opvdeo.3owl.com/data/dataes.xml";	
-				}else if(getdefaultMovie()==1){
-					 urlxml="http://opvdeo.3owl.com/data/mves.xml";	
-				}else if(getdefaultMovie()==2){
-					 urlxml="http://opvdeo.3owl.com/data/manga/mangaes.xml";	
-				}
-				if(getdefaultMovie()==0){
-					modestatus.setText("One Piece");
-				}else if(getdefaultMovie()==1){
-					modestatus.setText("The Movie");
-				}else if(getdefaultMovie()==2){
-					modestatus.setText("Manga");
-				}
-				 URLGOBAL=urlxml;
-				 new Thread(LoderUrl).start();
-				 im_lang.setImageResource(R.drawable.flag_sp);
-	
+				setdefaultUserLang(3);
+				 URLGOBAL=getDefaultUrlLang();
+				 
+				 if(myThread.isAlive()){
+					    myThread.interrupt(); 
+					}
+					myThread = new Thread(LoderUrl);
+					myThread.start();
+
+				
 				//}
 				
 			}
 		});
+        fr.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				setdefaultUserLang(4);
+				 URLGOBAL=getDefaultUrlLang();
+				 
+				 if(myThread.isAlive()){
+					    myThread.interrupt(); 
+					}
+					myThread = new Thread(LoderUrl);
+					myThread.start();
 
+				
+				//}
+				
+			}
+		});
       final CheckBox cb_menu=(CheckBox) findViewById(R.id.bt_img_menu);
 		 registerForContextMenu(cb_menu);
          cb_menu.setOnClickListener(new OnClickListener() {
@@ -284,12 +311,125 @@ if(settings1.getInt("ads_option", 0)==0){
 			
 		}
 	});
+			up.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					
+		             
+					  adapter=new LazyAdapter(context, todoItemsmapGobal);
+					  list.setAdapter(adapter);
+					  list.setSelection(0);
+					  adapter.notifyDataSetChanged();
+				}
+			});
+			down.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					
+					  adapter=new LazyAdapter(context, todoItemsmapGobal);
+					  list.setAdapter(adapter);
+					  list.setSelection(todoItemsmapGobal.size()-1);
+					  adapter.notifyDataSetChanged();
+				}
+			});
+			onplay.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					
+		          
+		             String backgroundImageName = (String) im_lang.getTag();
+		             TextView txt_lang	=(TextView)findViewById(R.id.modestatus);
+		        	 SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+					  adapter=new LazyAdapter(context, todoItemsmapGobal);
+					  list.setAdapter(adapter);
+					  list.setSelection(settings1.getInt(txt_lang.getText()+backgroundImageName, 0)); 
+					  adapter.notifyDataSetChanged();
+				}
+			});
+			autoep.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					
+					 TranslateAnimation slide1 = new TranslateAnimation(0, -50, 0,0 );   
+	                    slide1.setDuration(500);   
+	                    slide1.setFillBefore(true);
+	                    slide1.setAnimationListener(new AnimationListener() {
+							
+							@Override
+							public void onAnimationStart(Animation animation) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void onAnimationRepeat(Animation animation) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void onAnimationEnd(Animation arg0) {
+								up.setVisibility(View.VISIBLE);
+								down.setVisibility(View.VISIBLE);
+								onplay.setVisibility(View.VISIBLE);
+							}
+						});
+	                    TranslateAnimation slide = new TranslateAnimation(-100, 0, 0,0 );   
+	                    slide.setDuration(500);   
+	                    slidela.setAnimation(slide1);
+	                    autoep.setText("");
+	                    
+				}
+			});
+			autoep.setOnFocusChangeListener(new OnFocusChangeListener() {
+				
+				@Override
+				public void onFocusChange(View arg0, boolean arg1) {
+						updown_silde.setButtonDrawable(R.drawable.navigate_left);
+			    	 	updown_silde.setChecked(true);
+			    	 	make_slide_with_noaction();
+	                    autoep.setText("");
+				}
+			});
+			autoep.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					
+		             im_lang	=(ImageView)findViewById(R.id.icon_img);
+					  adapter=new LazyAdapter(context, todoItemsmapGobal);
+					  list.setAdapter(adapter);
+					  String s = ((TextView) arg1).getText().toString();
+					  int index=-1;
+					  for(int i=0;i<todoItemsmapGobal.size();i++){
+						  if(todoItemsmapGobal.get(i).get("title").startsWith(s)){
+							  index=i;
+						  }
+					  }
+				     list.setSelection(index);
+	  			  
+				     adapter.notifyDataSetChanged();
+				     onBackPressed();
+				}
+			});
+
     }
     
     //////////////////////////////////////////////////////////DCTECT HOME AND BACK PREASSS
     @Override
     public void onBackPressed() {
-    	//super.onBackPressed();
+    	 onResume();
+    	 updown_silde.setChecked(false);
+    	 updown_silde.setButtonDrawable(R.drawable.navigate_right);
+    	 make_slide_with_noaction();
+    	 autoep			=(AutoCompleteTextView) 	findViewById(R.id.go_src);
+    	 autoep.setText("");
+    	// autoep.setFocusable(false);
     }
 
 
@@ -342,6 +482,20 @@ if(settings1.getInt("ads_option", 0)==0){
 	    editor1.commit();
 	    return editor1.commit();
 	}
+	
+	public int getdefaultUserLang(){
+	    SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+	    return settings1.getInt("defaultlang", 0);
+	}
+		public boolean setdefaultUserLang(int arg1){
+		    SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+		    SharedPreferences.Editor editor1 = settings1.edit();
+		    editor1.putInt("defaultlang", arg1);
+		    editor1.commit();
+		    return editor1.commit();
+		}
+	
+	
 	int MODE_DIALOG_MOVIE=0;
 	int MODE_DIALOG_REPORT=1;	int MODE_DIALOG_MANGA=2;int MODE_APP_EXIT=3;
 	
@@ -358,13 +512,10 @@ if(settings1.getInt("ads_option", 0)==0){
 		    RadioButton rbdefaultmodemovie=(RadioButton) dialog.findViewById(R.id.modemovie);
 		    RadioButton rbdefaultmodemanga=(RadioButton) dialog.findViewById(R.id.modemanga);
 		    if(getdefaultMovie()==0){
-		    
 		    	rbdefaultmodeonepiece.setChecked(true);
 		    }else if(getdefaultMovie()==1){
-		    	
 		    	rbdefaultmodemovie.setChecked(true);
 		    }else if(getdefaultMovie()==2){
-		    	
 		    	rbdefaultmodemanga.setChecked(true);
 		    }
 		    final ImageView im_lang=(ImageView) findViewById(R.id.icon_img);
@@ -373,20 +524,14 @@ if(settings1.getInt("ads_option", 0)==0){
 				@Override
 				public void onClick(View arg0) {
 
-					
-					 URLGOBAL="http://opvdeo.3owl.com/data/dataen.xml";
-					 new Thread(LoderUrl).start();
-					im_lang.setImageResource(R.drawable.us);
-							 setdefaultMovie(0);
-							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
-								if(getdefaultMovie()==0){
-									modestatus.setText("One Piece");
-								}else if(getdefaultMovie()==1){
-									modestatus.setText("The Movie");
-								}else if(getdefaultMovie()==2){
-									modestatus.setText("Manga");
-								}
-								dialog.dismiss();
+					setdefaultMovie(0);
+					 URLGOBAL=getDefaultUrlLang();
+					 if(myThread.isAlive()){
+						    myThread.interrupt(); 
+						}
+						myThread = new Thread(LoderUrl);
+						myThread.start();
+						dialog.dismiss();
 								
 				}
 			});
@@ -394,40 +539,31 @@ if(settings1.getInt("ads_option", 0)==0){
 				
 				@Override
 				public void onClick(View arg0) {
-			      
-						 URLGOBAL="http://opvdeo.3owl.com/data/mven.xml";
-						 new Thread(LoderUrl).start();
-					 im_lang.setImageResource(R.drawable.us);
-							 setdefaultMovie(1);
-							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
-								if(getdefaultMovie()==0){
-									modestatus.setText("One Piece");
-								}else if(getdefaultMovie()==1){
-									modestatus.setText("The Movie");
-								}else if(getdefaultMovie()==2){
-									modestatus.setText("Manga");
-								}
-								dialog.dismiss();
+					setdefaultMovie(1);
+					 	URLGOBAL=getDefaultUrlLang();
+						
+						 
+						 if(myThread.isAlive()){
+							    myThread.interrupt(); 
+							}
+							myThread = new Thread(LoderUrl);
+							myThread.start();
+						    dialog.dismiss();
 				}
 			});
 		    rbdefaultmodemanga.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View arg0) {
-			        makeloading(true);
-					 URLGOBAL="http://opvdeo.3owl.com/data/manga/mangaen.xml";//////////////////////////will fix manga i edit path Realpath http://opvdeo.3owl.com/data/manga/mangaen.xml
-					 new Thread(LoderUrl).start();
-					 im_lang.setImageResource(R.drawable.us);
-							 setdefaultMovie(2);
-							 TextView modestatus=(TextView) findViewById(R.id.modestatus);
-								if(getdefaultMovie()==0){
-									modestatus.setText("One Piece");
-								}else if(getdefaultMovie()==1){
-									modestatus.setText("The Movie");
-								}else if(getdefaultMovie()==2){
-									modestatus.setText("Manga");
-								}
-								dialog.dismiss();
+					setdefaultMovie(2);
+			        URLGOBAL=getDefaultUrlLang();
+		
+					 if(myThread.isAlive()){
+						    myThread.interrupt(); 
+						}
+						myThread = new Thread(LoderUrl);
+						myThread.start();
+						dialog.dismiss();
 				}
 			});
 		    dialog.show();
@@ -448,9 +584,13 @@ if(settings1.getInt("ads_option", 0)==0){
 				
 						
 				
-			
+					 if(myThread.isAlive()){
+						    myThread.interrupt(); 
+						}
+					
+						
 							
-					new Thread(new Runnable() {
+						myThread = new Thread(new Runnable() {
 						Handler Handlerx=   new Handler(){
 							public void handleMessage(Message msg) {
 								if(msg.what==200){
@@ -470,12 +610,7 @@ if(settings1.getInt("ads_option", 0)==0){
 							
 				
 					if(!title.getText().toString().matches("")&&!message.getText().toString().matches("")){
-						
-						TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-					
-					HttpClient httpclient = new DefaultHttpClient();
-				    HttpPost httppost = new HttpPost("http://opvdeo.3owl.com/data/report/report.php");
-
+		
 		
 					Handlerx.post(new Runnable() {
 						
@@ -488,25 +623,13 @@ if(settings1.getInt("ads_option", 0)==0){
 							
 						}
 					});
-
-				    try {
-				  
-				        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-					   
-				        nameValuePairs.add(new BasicNameValuePair("imei",  telephonyManager.getDeviceId()+"|"+new Date().getTime()));
-				        nameValuePairs.add(new BasicNameValuePair("title", title.getText().toString()));
-				        nameValuePairs.add(new BasicNameValuePair("message", message.getText().toString()));
-				        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				        httppost.setHeader( "Cache-Control", "no-cache" );
-				        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-				        String response = httpclient.execute(httppost, responseHandler);
-
-			    } catch (ClientProtocolException e) {
-				    isOnline.post(CONNECT_ERROR);
-				    } catch (IOException e) {
-				    isOnline.post(CONNECT_ERROR);
-				    }
-
+					Intent intent = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
+					intent.setType("text/plain");
+					intent.putExtra(Intent.EXTRA_SUBJECT, "One Piece Report");
+					intent.putExtra(Intent.EXTRA_TEXT, message.getText());
+					intent.setData(Uri.parse("mailto:maxzateam@gmail.com")); // or just "mailto:" for blank
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+					startActivity(intent);
 				  
 			}else{
 				Handlerx.post(new Runnable() {
@@ -522,8 +645,8 @@ if(settings1.getInt("ads_option", 0)==0){
 				}
 				
 						}
-					}).start();
-
+					});
+						myThread.start();
 					
 				}
 			}); dialog.show();
@@ -614,7 +737,26 @@ if(settings1.getInt("ads_option", 0)==0){
 			  	if(msg.what==200){
 						  adapter=new LazyAdapter(context, todoItemsmapGobal);
 						  list.setAdapter(adapter);
-			  			  adapter.notifyDataSetChanged();
+						  
+				            ImageView im_lang	=(ImageView)findViewById(R.id.icon_img);
+				            final String backgroundImageName = (String) im_lang.getTag();
+				            
+				            final TextView txt_lang	=(TextView)findViewById(R.id.modestatus);
+
+				        	 SharedPreferences settings1 = getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+							 
+						  
+						  list.setSelection(settings1.getInt(txt_lang.getText()+backgroundImageName, 0));
+			  			  
+						  adapter.notifyDataSetChanged();
+						   
+					       myAutoComplete.addTextChangedListener(context);
+					       String []title=new String[todoItemsmapGobal.size()];
+					      for(int i=0;i<todoItemsmapGobal.size();i++){
+					    	  title[i]=todoItemsmapGobal.get(i).get("title");
+					      }
+					      myAutoComplete.setText("");
+					       myAutoComplete.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, title));
 			  	}
 			  	if(msg.what==0){
 			  			makeloading(true);
@@ -642,12 +784,12 @@ if(settings1.getInt("ads_option", 0)==0){
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo != null && netInfo.isConnected()) {
                 try {
-                    URL url = new URL("http://www.google.com");
+                    URL url = new URL("http://opvdeo.3owl.com/data/checkloading.xml");
                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                     urlc.setConnectTimeout(5000);
                     urlc.connect();
             if (urlc.getResponseCode() == 200) {
-            	urlc.disconnect();
+            	
     	       isOnline.post(CONNECT_COMPLETE);
           
 			final ArrayList<HashMap<String, String>> todoItemsmap = new ArrayList<HashMap<String, String>>();
@@ -749,9 +891,10 @@ if(settings1.getInt("ads_option", 0)==0){
 					alertbox.setCancelable(false);
 					alertbox.setNeutralButton("Retry", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
-							TextView loading = (TextView) findViewById(R.id.loading);
+							
 							loading.setText("No Connection.");
-							//new Thread(checkOnline).start();
+							arg0.dismiss();
+						
 						}
 	            });
 	            alertbox.show();
@@ -778,8 +921,257 @@ if(settings1.getInt("ads_option", 0)==0){
 					}
 				};
 
+				private boolean isTabletDevice() {  
+					if (android.os.Build.VERSION.SDK_INT >= 11) { // honeycomb  
+					  // test screen size, use reflection because isLayoutSizeAtLeast is only available since 11  
+					  Configuration con = getResources().getConfiguration();  
+					  try {  
+					     Method mIsLayoutSizeAtLeast = con.getClass().getMethod("isLayoutSizeAtLeast", int.class);  
+					     Boolean r = (Boolean) mIsLayoutSizeAtLeast.invoke(con, 0x00000004); // Configuration.SCREENLAYOUT_SIZE_XLARGE  
+					     return r;  
+					  } catch (Exception x) {  
+					     //x.printStackTrace();  
+					     return false;  
+					  }  
+					}  
+					return false;  
+					}  
+				
+				public String getDefaultUrlLang(){
+					String urlxml="";
+					if(getdefaultMovie()==0){
+						if(getdefaultUserLang()==0){
+							urlxml="http://opvdeo.3owl.com/data/dataen.xml";	
+							 im_lang.setTag("us");
+							 im_lang.setImageResource(R.drawable.us);
+						}else if(getdefaultUserLang()==1){
+							urlxml="http://opvdeo.3owl.com/data/datager.xml";	
+							 im_lang.setTag("ger");
+							 im_lang.setImageResource(R.drawable.ge);
+						}else if(getdefaultUserLang()==2){
+							urlxml="http://opvdeo.3owl.com/data/datath.xml";	
+							 im_lang.setTag("th");
+							 im_lang.setImageResource(R.drawable.flag_th2);
+						}else if(getdefaultUserLang()==3){
+							urlxml="http://opvdeo.3owl.com/data/dataes.xml";	
+							 im_lang.setTag("es");
+							 im_lang.setImageResource(R.drawable.flag_sp);
+						}else if(getdefaultUserLang()==4){
+							urlxml="http://opvdeo.3owl.com/data/datafr.xml";	
+							 im_lang.setImageResource(R.drawable.fr);
+							 im_lang.setTag("fr");
+						}
+						 
+					}else if(getdefaultMovie()==1){
+						if(getdefaultUserLang()==0){
+							urlxml="http://opvdeo.3owl.com/data/mven.xml";	
+							 im_lang.setTag("us");
+							 im_lang.setImageResource(R.drawable.us);
+						}else if(getdefaultUserLang()==1){
+							urlxml="http://opvdeo.3owl.com/data/mvger.xml";	
+							 im_lang.setTag("ger");
+							 im_lang.setImageResource(R.drawable.ge);
+						}else if(getdefaultUserLang()==2){
+							urlxml="http://opvdeo.3owl.com/data/mvth.xml";	
+							 im_lang.setTag("th");
+							 im_lang.setImageResource(R.drawable.flag_th2);
+						}else if(getdefaultUserLang()==3){
+							urlxml="http://opvdeo.3owl.com/data/mves.xml";	
+							 im_lang.setTag("es");
+							 im_lang.setImageResource(R.drawable.flag_sp);
+						}else if(getdefaultUserLang()==4){
+							urlxml="http://opvdeo.3owl.com/data/mvfr.xml";	
+							 im_lang.setTag("fr");
+							 im_lang.setImageResource(R.drawable.fr);
+						}
+						 
+					}else if(getdefaultMovie()==2){
+						if(getdefaultUserLang()==0){
+							 urlxml="http://opvdeo.3owl.com/data/manga/mangaen.xml";
+							 im_lang.setTag("us");
+							 im_lang.setImageResource(R.drawable.us);
+						}else if(getdefaultUserLang()==1){
+							 urlxml="http://opvdeo.3owl.com/data/manga/mangager.xml";
+							 im_lang.setTag("ger");
+							 im_lang.setImageResource(R.drawable.ge);
+						}else if(getdefaultUserLang()==2){
+							 urlxml="http://opvdeo.3owl.com/data/manga/mangath.xml";
+							 im_lang.setTag("th");
+							 im_lang.setImageResource(R.drawable.flag_th2);
+						}else if(getdefaultUserLang()==3){
+							 urlxml="http://opvdeo.3owl.com/data/manga/mangaes.xml";
+							 im_lang.setTag("es");
+							 im_lang.setImageResource(R.drawable.flag_sp);
+						}else if(getdefaultUserLang()==4){
+							 urlxml="http://opvdeo.3owl.com/data/manga/mangafr.xml";
+							 im_lang.setTag("fr");
+							 im_lang.setImageResource(R.drawable.fr);
+						}
+				
+							
+					}
+					setdefaultLabelUserMovie();
+					return urlxml;
+				}
+				public void setdefaultLabelUserMovie(){
+					if(getdefaultMovie()==0){
+						modestatus.setText("One Piece");
+					}else if(getdefaultMovie()==1){
+						modestatus.setText("The Movie");
+					}else if(getdefaultMovie()==2){
+						modestatus.setText("Manga");
+					}
 
+					
+					
+				}
+				
+				public void make_slide_with_noaction(){
+	
+					
+					
+					
+					up.setVisibility(View.GONE);
+					down.setVisibility(View.GONE);
+					down.setVisibility(View.GONE);
+					onplay.setVisibility(View.GONE);
+					
+							
+		                    TranslateAnimation slide1 = new TranslateAnimation(0, -50, 0,0 );   
+		                    slide1.setDuration(500);   
+		                    slide1.setFillBefore(true);
+		                    slide1.setAnimationListener(new AnimationListener() {
+								
+								@Override
+								public void onAnimationStart(Animation animation) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void onAnimationRepeat(Animation animation) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void onAnimationEnd(Animation arg0) {
+									up.setVisibility(View.VISIBLE);
+									down.setVisibility(View.VISIBLE);
+									onplay.setVisibility(View.VISIBLE);
+								}
+							});
+		                   
+		                    TranslateAnimation slide = new TranslateAnimation(-100, 0, 0,0 );   
+		                    slide.setDuration(500);   
+		                    
 
+		                    
+							if(updown_silde.isChecked()){
+								
+								slidela.setAnimation(slide1);
+								updown_silde.setButtonDrawable(R.drawable.navigate_right);
+
+							}else{
+								
+								slidela.setAnimation(slide);
+								updown_silde.setButtonDrawable(R.drawable.navigate_left);
+								up.setVisibility(View.GONE);
+								down.setVisibility(View.GONE);
+								onplay.setVisibility(View.GONE);
+							}
+							
+				
+					
+					
+					
+					
+					
+				}
+public void make_slide(){
+	
+					
+					
+					
+					up.setVisibility(View.GONE);
+					down.setVisibility(View.GONE);
+					down.setVisibility(View.GONE);
+					onplay.setVisibility(View.GONE);
+					updown_silde.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View arg0) {
+							
+		                    TranslateAnimation slide1 = new TranslateAnimation(0, -50, 0,0 );   
+		                    slide1.setDuration(500);   
+		                    slide1.setFillBefore(true);
+		                    slide1.setAnimationListener(new AnimationListener() {
+								
+								@Override
+								public void onAnimationStart(Animation animation) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void onAnimationRepeat(Animation animation) {
+									// TODO Auto-generated method stub
+									
+								}
+								
+								@Override
+								public void onAnimationEnd(Animation arg0) {
+									up.setVisibility(View.VISIBLE);
+									down.setVisibility(View.VISIBLE);
+									onplay.setVisibility(View.VISIBLE);
+								}
+							});
+		                   
+		                    TranslateAnimation slide = new TranslateAnimation(-100, 0, 0,0 );   
+		                    slide.setDuration(500);   
+		                    
+
+		                    
+							if(updown_silde.isChecked()){
+								
+								slidela.setAnimation(slide1);
+								updown_silde.setButtonDrawable(R.drawable.navigate_right);
+							}else{
+								slidela.setAnimation(slide);
+								up.setVisibility(View.GONE);
+								down.setVisibility(View.GONE);
+								onplay.setVisibility(View.GONE);
+								updown_silde.setButtonDrawable(R.drawable.navigate_left);
+							}
+							
+						}
+					});
+					
+					
+					
+					
+					
+				}
+
+				@Override
+				public void afterTextChanged(Editable arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void beforeTextChanged(CharSequence arg0, int arg1,
+						int arg2, int arg3) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onTextChanged(CharSequence arg0, int arg1,
+						int arg2, int arg3) {
+					// TODO Auto-generated method stub
+					
+				}
 }
 
 

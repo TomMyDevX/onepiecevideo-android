@@ -1,10 +1,14 @@
 package tommy.dev.onepieceproject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,19 +50,90 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class FirstAC extends Activity {
-	
+	//ArrayList<HashMap<String,String>> listcheck=new ArrayList<HashMap<String,String>>();
+	Thread myThread=new Thread();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_first_ac);
-		new Thread(checkOnline).start();
 		
+//		HashMap<String , String > map=new HashMap<String, String>();
+//		map.put("name","dataen.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/dataen.xml");
+//		listcheck.add(map);
+//		
+//	    map=new HashMap<String, String>();
+//		map.put("name","mven.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/mven.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mangaen.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/manga/mangaen.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","datager.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/datager.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mvger.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/mvger.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mangager.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/manga/mangager.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","datath.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/datath.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mvth.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/mvth.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mangath.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/manga/mangath.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","dataes.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/dataes.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mves.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/mves.xml");
+//		listcheck.add(map);
+//		
+//		map=new HashMap<String, String>();
+//		map.put("name","mangaes.xml");
+//		map.put("url", "http://opvdeo.3owl.com/data/manga/mangaes.xml");
+//		listcheck.add(map);
+		
+		
+		if(myThread.isAlive()){
+		    myThread.interrupt(); 
+		}
+		myThread = new Thread(checkOnline);
+		myThread.start();
 	}
     //////////////////////////////////////////////////////////DCTECT HOME AND BACK PREASSS
     @Override
     public void onBackPressed() {
-    	//finish();
+    	
+		if(myThread.isAlive()){
+		    myThread.interrupt(); 
+		}
+		finish();
+	
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -101,7 +176,7 @@ public class FirstAC extends Activity {
            					
            				}
            	    	 	});
-                       URL url = new URL("http://www.google.com");
+                       URL url = new URL("http://opvdeo.3owl.com/data/checkloading.xml");
                        HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                        urlc.setConnectTimeout(3000);
                        urlc.connect();
@@ -112,11 +187,14 @@ public class FirstAC extends Activity {
        	        	isOnline.post(new Runnable() {
     				@Override
     				public void run() {
+    					//	for(int i=0;i<listcheck.size();i++){
+    				
+    					
     					 TextView module_status=(TextView) findViewById(R.id.module_status);
     					 module_status.setText("Welcome!");
     					 module_status.setTextColor(Color.WHITE);
     					 isOnline.post(CONNECT_COMPLETE);
-    				}
+    				}//}
     	    	 	});
        	      	  
        	      	   urlc.disconnect();
@@ -156,6 +234,10 @@ public class FirstAC extends Activity {
 					isOnline.sendMessage(onstatus);
 				}
 			};
+			
+			
+			
+			
 			Handler 
 			isOnline=new Handler(){
 				@Override
