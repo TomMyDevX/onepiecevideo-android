@@ -47,6 +47,10 @@ public class LazyAdapter extends BaseAdapter {
         imageLoader=new ImageLoader(activity.getApplicationContext());
     }
 
+    
+    
+    
+    
     public int getCount() {
         return data;
     }
@@ -62,7 +66,7 @@ public class LazyAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return TYPE_COUNT;
     }
-
+   
 
     public View getView(final int position, View convertView, final ViewGroup parent) {
     	
@@ -71,17 +75,22 @@ public class LazyAdapter extends BaseAdapter {
         if(position<todoItemsmap.size()){
         	
 
+            ImageView im_lang	=(ImageView)activity.findViewById(R.id.icon_img);
+            final String backgroundImageName = (String) im_lang.getTag();
+            
+            final TextView txt_lang	=(TextView)activity.findViewById(R.id.modestatus);
 
-      
-       
-  
-        
+        	 SharedPreferences settings1 = activity.getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+			 
+
         TextView text=(TextView)vi.findViewById(R.id.text);;
         text.setTextColor(Color.DKGRAY);
        // text.setBackgroundColor(0xFFB8E459);
         ImageView image=(ImageView)vi.findViewById(R.id.image);
         image.setImageResource(R.drawable.ficon);
         //Log.e("POS",""+position);
+
+        
         text.setText(todoItemsmap.get(position).get("title"));
         vi.setOnClickListener(new OnClickListener() {
 			
@@ -90,7 +99,16 @@ public class LazyAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View arg0) {
 				setSelectedItem(position);
-                notifyDataSetChanged();
+                notifyDataSetChanged();     
+                
+               
+                
+                
+			    SharedPreferences settings1 = activity.getSharedPreferences("One_Piece_Video_By_TomMy", 0);
+			    SharedPreferences.Editor editor1 = settings1.edit();
+			    editor1.putInt(txt_lang.getText()+backgroundImageName, position);
+			    editor1.commit();
+                Log.e("Save",txt_lang.getText()+backgroundImageName+"->"+position);
 				//layout.setBackgroundResource(R.drawable.app_background_d);
 				//Log.e("POS",""+position+"|"+todoItemsmap.get(position).get("data"));
 		       // String filename =todoItemsmap.get(position).get("data");
@@ -149,14 +167,27 @@ public class LazyAdapter extends BaseAdapter {
 				}
 		});
         
-        if (position == selectedItem)
-        {
+        if(position==settings1.getInt(txt_lang.getText()+backgroundImageName, -1)){
         	vi.setBackgroundResource(R.color.bluef5);
-           // vi.setBackgroundResource(R.drawable.app_background_or);
-            int top = (vi == null) ? 0 : vi.getTop();
-            ((ListView) parent).setSelectionFromTop(position, top);
+            int top = (vi == null)||(settings1.getInt(txt_lang.getText()+backgroundImageName, 0)==0) ? 0 : vi.getTop();
+       	 	
+            
+           // ((ListView) parent).setSelection(settings1.getInt(txt_lang.getText()+backgroundImageName, 0));
+           //((ListView) parent).scrollTo(0,settings1.getInt(txt_lang.getText()+backgroundImageName, 0));
+            // ((ListView) parent).setSelectionAfterHeaderView();
+            ((ListView) parent).setSelectionFromTop(settings1.getInt(txt_lang.getText()+backgroundImageName, 0), top);
+           // ((ListView) parent).sets
+            
+   
+            Log.e("Position",settings1.getInt(txt_lang.getText()+backgroundImageName, 0)+">"+top);
         }
-        else
+        //else if (position == selectedItem)
+//        {
+//        	vi.setBackgroundResource(R.color.bluef5);
+//            int top = (vi == null) ? 0 : vi.getTop();
+//            ((ListView) parent).setSelectionFromTop(position, top);
+//        } 
+         else
         {
         	vi.setBackgroundResource(R.color.whitef5);
           //  vi.setBackgroundResource(R.drawable.app_background_b);
@@ -164,6 +195,13 @@ public class LazyAdapter extends BaseAdapter {
        // vi.setPadding(15, 15, 15, 15);
        // Log.e("IMG URL","http://opvdeo.3owl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png");
         imageLoader.DisplayImage("http://opvdeo.3owl.com/thumnail/"+todoItemsmap.get(position).get("thumbnail")+".png", image);
+
+       
+        // ((ListView) parent).sets
+         
+         notifyDataSetChanged();  
+   
+        
         }
         return vi;
     }
@@ -208,6 +246,7 @@ public class LazyAdapter extends BaseAdapter {
  	 
  	
  	}
+
     public boolean checkMXPlayer(){
     	try{
     	    activity.getPackageManager().getApplicationInfo("com.mxtech.videoplayer.ad", 0 );
