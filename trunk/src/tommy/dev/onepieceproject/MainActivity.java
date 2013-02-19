@@ -784,7 +784,7 @@ public class MainActivity extends Activity  implements TextWatcher{
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo != null && netInfo.isConnected()) {
                 try {
-                    URL url = new URL("http://opvdeo.3owl.com/data/checkloading.xml");
+                    URL url = new URL("http://assholy.3owl.com/data/checkloading.xml");
                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                     urlc.setConnectTimeout(5000);
                     urlc.connect();
@@ -941,69 +941,69 @@ public class MainActivity extends Activity  implements TextWatcher{
 					String urlxml="";
 					if(getdefaultMovie()==0){
 						if(getdefaultUserLang()==0){
-							urlxml="http://opvdeo.3owl.com/data/dataen.xml";	
+							urlxml="http://assholy.3owl.com/data/dataen.xml";	
 							 im_lang.setTag("us");
 							 im_lang.setImageResource(R.drawable.us);
 						}else if(getdefaultUserLang()==1){
-							urlxml="http://opvdeo.3owl.com/data/datager.xml";	
+							urlxml="http://assholy.3owl.com/data/datager.xml";	
 							 im_lang.setTag("ger");
 							 im_lang.setImageResource(R.drawable.ge);
 						}else if(getdefaultUserLang()==2){
-							urlxml="http://opvdeo.3owl.com/data/datath.xml";	
+							urlxml="http://assholy.3owl.com/data/datath.xml";	
 							 im_lang.setTag("th");
 							 im_lang.setImageResource(R.drawable.flag_th2);
 						}else if(getdefaultUserLang()==3){
-							urlxml="http://opvdeo.3owl.com/data/dataes.xml";	
+							urlxml="http://assholy.3owl.com/data/dataes.xml";	
 							 im_lang.setTag("es");
 							 im_lang.setImageResource(R.drawable.flag_sp);
 						}else if(getdefaultUserLang()==4){
-							urlxml="http://opvdeo.3owl.com/data/datafr.xml";	
+							urlxml="http://assholy.3owl.com/data/datafr.xml";	
 							 im_lang.setImageResource(R.drawable.fr);
 							 im_lang.setTag("fr");
 						}
 						 
 					}else if(getdefaultMovie()==1){
 						if(getdefaultUserLang()==0){
-							urlxml="http://opvdeo.3owl.com/data/mven.xml";	
+							urlxml="http://assholy.3owl.com/data/mven.xml";	
 							 im_lang.setTag("us");
 							 im_lang.setImageResource(R.drawable.us);
 						}else if(getdefaultUserLang()==1){
-							urlxml="http://opvdeo.3owl.com/data/mvger.xml";	
+							urlxml="http://assholy.3owl.com/data/mvger.xml";	
 							 im_lang.setTag("ger");
 							 im_lang.setImageResource(R.drawable.ge);
 						}else if(getdefaultUserLang()==2){
-							urlxml="http://opvdeo.3owl.com/data/mvth.xml";	
+							urlxml="http://assholy.3owl.com/data/mvth.xml";	
 							 im_lang.setTag("th");
 							 im_lang.setImageResource(R.drawable.flag_th2);
 						}else if(getdefaultUserLang()==3){
-							urlxml="http://opvdeo.3owl.com/data/mves.xml";	
+							urlxml="http://assholy.3owl.com/data/mves.xml";	
 							 im_lang.setTag("es");
 							 im_lang.setImageResource(R.drawable.flag_sp);
 						}else if(getdefaultUserLang()==4){
-							urlxml="http://opvdeo.3owl.com/data/mvfr.xml";	
+							urlxml="http://assholy.3owl.com/data/mvfr.xml";	
 							 im_lang.setTag("fr");
 							 im_lang.setImageResource(R.drawable.fr);
 						}
 						 
 					}else if(getdefaultMovie()==2){
 						if(getdefaultUserLang()==0){
-							 urlxml="http://opvdeo.3owl.com/data/manga/mangaen.xml";
+							 urlxml="http://assholy.3owl.com/data/manga/mangaen.xml";
 							 im_lang.setTag("us");
 							 im_lang.setImageResource(R.drawable.us);
 						}else if(getdefaultUserLang()==1){
-							 urlxml="http://opvdeo.3owl.com/data/manga/mangager.xml";
+							 urlxml="http://assholy.3owl.com/data/manga/mangager.xml";
 							 im_lang.setTag("ger");
 							 im_lang.setImageResource(R.drawable.ge);
 						}else if(getdefaultUserLang()==2){
-							 urlxml="http://opvdeo.3owl.com/data/manga/mangath.xml";
+							 urlxml="http://assholy.3owl.com/data/manga/mangath.xml";
 							 im_lang.setTag("th");
 							 im_lang.setImageResource(R.drawable.flag_th2);
 						}else if(getdefaultUserLang()==3){
-							 urlxml="http://opvdeo.3owl.com/data/manga/mangaes.xml";
+							 urlxml="http://assholy.3owl.com/data/manga/mangaes.xml";
 							 im_lang.setTag("es");
 							 im_lang.setImageResource(R.drawable.flag_sp);
 						}else if(getdefaultUserLang()==4){
-							 urlxml="http://opvdeo.3owl.com/data/manga/mangafr.xml";
+							 urlxml="http://assholy.3owl.com/data/manga/mangafr.xml";
 							 im_lang.setTag("fr");
 							 im_lang.setImageResource(R.drawable.fr);
 						}
